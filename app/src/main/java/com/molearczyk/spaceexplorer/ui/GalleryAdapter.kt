@@ -26,11 +26,3 @@ class GalleryAdapter(private val galleryItems:List<Any>) : RecyclerView.Adapter<
     }
 
 }
-
-interface ImageLoader(){
-
-
-    fun loadImage(url:String, destination:ImageView)
-
-
-}
