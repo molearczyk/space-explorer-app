@@ -48,13 +48,49 @@ class NasaNetworkApiTest {
                 nasaImageNetworkApi.search(),
                 BiFunction { repositoryModels: MutableList<GalleryRecord>, nasaModels: CollectionContainer ->
                     repositoryModels.size == nasaModels.collection.items.size
-                }
-        )
+                })
                 .test()
                 .awaitCount(1)
                 .assertValue {
                     it
                 }
+
+    }
+
+    @Test
+    fun `querying nasa network api with a 'Moon' keyword returns keyword and titles with Moon successfully`() {
+        val networkModule = NetworkModule()
+        val serverProperties: ServerProperties = networkModule.provideServerProperties()
+        val retrofit: Retrofit = networkModule.provideRetrofit(serverProperties)
+        val nasaImageNetworkApi = networkModule.provideNasaImageNetworkApi(retrofit)
+
+        nasaImageNetworkApi.search("Moon")
+                .map { it.collection.items }
+                .test()
+                .awaitCount(1)
+                .assertValue {
+                    it.any { it.data.any { "Moon" in it.keywords } } && it.any { it.data.any { "Moon" in it.title } }
+                }
+
+
+    }
+
+    @Test
+    fun `querying nasa network api with 'Moon' and 'Mars' keywords returns keywords and titles with Moon and Mars successfully`() {
+        val networkModule = NetworkModule()
+        val serverProperties: ServerProperties = networkModule.provideServerProperties()
+        val retrofit: Retrofit = networkModule.provideRetrofit(serverProperties)
+        val nasaImageNetworkApi = networkModule.provideNasaImageNetworkApi(retrofit)
+
+        nasaImageNetworkApi.search("Moon Mars")
+                .map { it.collection.items }
+                .test()
+                .awaitCount(1)
+                .assertValue {
+                    it.any { it.data.any { "Moon" in it.keywords } } && it.any { it.data.any { "Moon" in it.title } }
+                            && it.any { it.data.any { "Mars" in it.keywords } } && it.any { it.data.any { "Mars" in it.title } }
+                }
+
 
     }
 

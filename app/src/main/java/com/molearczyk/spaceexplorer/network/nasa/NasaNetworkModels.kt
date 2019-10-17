@@ -26,4 +26,8 @@ data class DataItem(val center: String,
                     val media_type: String,
                     val nasa_id: String,
                     val photographer: String?,
-                    val title: String)
+                    val title: String,
+                    val location: String?,
+                    val description_508: String?,
+                    val secondary_creator: String?,
+                    val album: List<String>?)
