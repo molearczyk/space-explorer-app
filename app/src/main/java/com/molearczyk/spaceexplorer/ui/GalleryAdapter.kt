@@ -1,27 +1,46 @@
 package com.molearczyk.spaceexplorer.ui
 
+import android.content.Context
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
+import androidx.core.view.updateLayoutParams
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.molearczyk.spaceexplorer.R
 import com.molearczyk.spaceexplorer.inflate
+import com.molearczyk.spaceexplorer.network.models.GalleryRecord
 
-class GalleryAdapter(private val galleryItems:List<Any>) : RecyclerView.Adapter<GalleryAdapter.GalleryItemViewHolder>() {
+typealias GalleryItemClickListener = (GalleryRecord) -> Unit
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): GalleryItemViewHolder = GalleryItemViewHolder(parent.inflate(R.layout.item_gallery_view_holder))
+class GalleryAdapter(private val pictures: List<GalleryRecord>, private val clickListener: GalleryItemClickListener, gridSpan: Int, context: Context) : RecyclerView.Adapter<GalleryAdapter.GalleryItemViewHolder>() {
 
-    override fun getItemCount(): Int = galleryItems.size
+    private val itemSize = context.resources.displayMetrics.widthPixels / gridSpan
+
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): GalleryItemViewHolder = GalleryItemViewHolder(parent.inflate(R.layout.item_gallery_view_holder).apply {
+        this.updateLayoutParams {
+            width = itemSize
+            height = itemSize
+        }
+    })
+
+    override fun getItemCount(): Int = pictures.size
 
     override fun onBindViewHolder(holder: GalleryItemViewHolder, position: Int) {
-        holder.bind(galleryItems[position])
+        holder.bind(pictures[position], clickListener)
     }
 
     class GalleryItemViewHolder(rootView: View) : RecyclerView.ViewHolder(rootView) {
 
-        fun bind(any: Any) {
-
+        fun bind(record: GalleryRecord, clickListener: GalleryItemClickListener) {
+            itemView.setOnClickListener {
+                clickListener(record)
+            }
+            Glide.with(itemView)
+                    .load(record.previewImage.toString())
+                    .centerCrop()
+                    .into(itemView as ImageView)
         }
-
 
     }
 

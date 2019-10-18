@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">Space Explorer</string>
+    <string name="search_prompt">Explore the space…</string>
+    <string name="error_no_internet_description">The Internet is not available at this time.\nConnect to the Internet and try again.</string>
+    <string name="error_generic_description">An error occurred, please try again later.</string>
+    <string name="error_retry_button">Retry</string>
 </resources>
