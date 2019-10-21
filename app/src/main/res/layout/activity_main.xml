@@ -6,35 +6,7 @@
     android:layout_height="match_parent"
     android:animateLayoutChanges="true"
     android:fitsSystemWindows="true"
-    tools:context=".ui.MainActivity">
-
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:animateLayoutChanges="true"
-        android:gravity="center"
-        android:orientation="vertical">
-
-        <TextView
-            android:id="@+id/noContentPromptView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/activity_horizontal_margin"
-            android:layout_marginEnd="@dimen/activity_horizontal_margin"
-            android:drawableTop="@drawable/ic_error_outline_accent_24dp"
-            android:gravity="center"
-            android:visibility="gone" />
-
-        <Button
-            android:id="@+id/retryButton"
-            style="@style/Widget.MaterialComponents.Button.TextButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/error_retry_button"
-            android:visibility="gone" />
-
-    </LinearLayout>
+    tools:context=".ui.main.MainActivity">
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/spaceImagesRecyclerView"
@@ -69,7 +41,7 @@
         </com.google.android.material.appbar.CollapsingToolbarLayout>
 
         <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/search"
+            android:id="@+id/searchInputLayout"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -79,6 +51,7 @@
             android:layout_marginBottom="4dp"
             android:gravity="center_horizontal"
             app:boxStrokeColor="@android:color/white"
+            app:endIconMode="clear_text"
             app:hintEnabled="false"
             app:layout_collapseMode="none">
 
@@ -96,5 +69,33 @@
         </com.google.android.material.textfield.TextInputLayout>
 
     </com.google.android.material.appbar.AppBarLayout>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:animateLayoutChanges="true"
+        android:gravity="center"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/noContentPromptView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/activity_horizontal_margin"
+            android:layout_marginEnd="@dimen/activity_horizontal_margin"
+            android:drawableTop="@drawable/ic_error_outline_accent_24dp"
+            android:gravity="center"
+            android:visibility="gone" />
+
+        <Button
+            android:id="@+id/retryButton"
+            style="@style/Widget.MaterialComponents.Button.TextButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/error_retry_button"
+            android:visibility="gone" />
+
+    </LinearLayout>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

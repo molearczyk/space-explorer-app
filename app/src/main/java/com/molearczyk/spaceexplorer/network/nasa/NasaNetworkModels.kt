@@ -22,7 +22,7 @@ data class Metadata(val total_hits: Int)
 data class DataItem(val center: String,
                     val date_created: String,
                     val description: String,
-                    val keywords: List<String>,
+                    val keywords: List<String>?,
                     val media_type: String,
                     val nasa_id: String,
                     val photographer: String?,

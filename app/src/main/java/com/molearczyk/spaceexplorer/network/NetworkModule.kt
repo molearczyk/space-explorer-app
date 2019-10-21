@@ -2,7 +2,7 @@ package com.molearczyk.spaceexplorer.network
 
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import com.molearczyk.spaceexplorer.network.models.ServerProperties
-import com.molearczyk.spaceexplorer.network.nasa.ImageSearchNetworkApi
+import com.molearczyk.spaceexplorer.network.nasa.ImagesNasaNetworkApi
 import dagger.Module
 import dagger.Provides
 import dagger.Reusable
@@ -32,8 +32,8 @@ class NetworkModule {
     @Reusable
     fun provideNasaImageNetworkApi(
             retrofit: Retrofit
-    ): ImageSearchNetworkApi {
-        return retrofit.create(ImageSearchNetworkApi::class.java)
+    ): ImagesNasaNetworkApi {
+        return retrofit.create(ImagesNasaNetworkApi::class.java)
     }
 
 }

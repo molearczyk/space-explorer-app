@@ -21,15 +21,15 @@
         tools:ignore="GoogleAppIndexingWarning">
 
         <activity
-            android:name=".ui.ImageDetailActivity"
+            android:name=".ui.imagedetail.ImageDetailActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:theme="@style/AppTheme.Fullscreen">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".ui.MainActivity" />
+                android:value=".ui.main.MainActivity" />
         </activity>
 
-        <activity android:name=".ui.MainActivity">
+        <activity android:name=".ui.main.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

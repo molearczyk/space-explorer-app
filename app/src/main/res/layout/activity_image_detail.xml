@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:animateLayoutChanges="true"
-    tools:context=".ui.ImageDetailActivity">
+    tools:context=".ui.imagedetail.ImageDetailActivity">
 
     <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
@@ -21,7 +21,7 @@
     </com.google.android.material.appbar.AppBarLayout>
 
     <ImageView
-        android:id="@+id/fullscreen_content"
+        android:id="@+id/fullscreenImageView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:gravity="center"
@@ -44,15 +44,21 @@
             android:orientation="horizontal"
             tools:ignore="UselessParent">
 
-            <TextView
+            <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/imageDescriptionTextView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/activity_horizontal_margin"
-                android:layout_marginTop="@dimen/activity_vertical_margin"
                 android:layout_marginEnd="@dimen/activity_horizontal_margin"
                 android:layout_marginBottom="@dimen/activity_vertical_margin"
-                tools:text="@tools:sample/lorem"
+                android:autoLink="all"
+                android:ellipsize="end"
+                android:justificationMode="inter_word"
+                android:linksClickable="true"
+                android:maxHeight="110dp"
+                android:textColor="@color/primaryText"
+                tools:ignore="UnusedAttribute"
+                tools:text="@tools:sample/lorem/random"
                 tools:textColor="@color/colorAccent" />
 
         </LinearLayout>
