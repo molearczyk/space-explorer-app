@@ -11,8 +11,9 @@ import com.molearczyk.spaceexplorer.R
 import com.molearczyk.spaceexplorer.network.models.GalleryRecord
 import com.molearczyk.spaceexplorer.show
 import com.molearczyk.spaceexplorer.ui.GalleryAdapter
+import com.molearczyk.spaceexplorer.ui.ImageLoader
 import com.molearczyk.spaceexplorer.ui.MainView
-import com.molearczyk.spaceexplorer.ui.imagedetail.ImageDetailActivity
+import com.molearczyk.spaceexplorer.ui.detail.ImageDetailActivity
 import dagger.android.AndroidInjection
 import kotlinx.android.synthetic.main.activity_main.*
 import javax.inject.Inject
@@ -22,6 +23,9 @@ class MainActivity : AppCompatActivity(), MainView {
 
     @Inject
     lateinit var presenter: MainPresenter
+
+    @Inject
+    lateinit var imageLoader: ImageLoader
 
     private val gridSpan: Int by lazy {
         resources.getInteger(R.integer.main_grid_span)
@@ -57,7 +61,7 @@ class MainActivity : AppCompatActivity(), MainView {
     }
 
     override fun showImages(newImages: List<GalleryRecord>) {
-        spaceImagesRecyclerView.adapter = GalleryAdapter(newImages, this::navigateToFullscreen, gridSpan, this)
+        spaceImagesRecyclerView.adapter = GalleryAdapter(newImages, this::navigateToFullscreen, imageLoader, gridSpan, this)
     }
 
     override fun navigateToFullscreen(event: GalleryRecord) {

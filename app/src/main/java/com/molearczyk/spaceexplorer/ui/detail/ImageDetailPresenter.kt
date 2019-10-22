@@ -1,4 +1,4 @@
-package com.molearczyk.spaceexplorer.ui.imagedetail
+package com.molearczyk.spaceexplorer.ui.detail
 
 import android.text.SpannableStringBuilder
 import android.util.Log
@@ -15,6 +15,9 @@ import okhttp3.HttpUrl.Companion.toHttpUrl
 import javax.inject.Inject
 
 class ImageDetailPresenter @Inject constructor(private val nasaImagesRepository: NasaImagesRepository) : BasePresenter<ImageDetailsView>() {
+
+
+    private var areSystemControlsVisible: Boolean = true
 
     fun fetchImageDetail(event: GalleryRecordEvent) {
         subscriptions.add(nasaImagesRepository
@@ -42,5 +45,18 @@ class ImageDetailPresenter @Inject constructor(private val nasaImagesRepository:
                     }
                     .append("\n")
                     .append(HtmlCompat.fromHtml(event.description, HtmlCompat.FROM_HTML_MODE_COMPACT))
+
+    fun onFullImageClick() {
+        if (areSystemControlsVisible) {
+            view.hideSystemUi()
+        } else {
+            view.showSystemUi()
+        }
+        areSystemControlsVisible = !areSystemControlsVisible
+    }
+
+    fun retryOnClick() {
+        //TODO retry logic
+    }
 
 }

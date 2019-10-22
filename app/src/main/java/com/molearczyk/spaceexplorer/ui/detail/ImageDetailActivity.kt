@@ -1,29 +1,38 @@
-package com.molearczyk.spaceexplorer.ui.imagedetail
+package com.molearczyk.spaceexplorer.ui.detail
 
 import android.os.Bundle
 import android.os.Handler
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
-import com.bumptech.glide.Glide
-import com.molearczyk.spaceexplorer.R
+import androidx.appcompat.widget.Toolbar
 import com.molearczyk.spaceexplorer.gone
 import com.molearczyk.spaceexplorer.show
+import com.molearczyk.spaceexplorer.ui.ImageLoader
 import com.molearczyk.spaceexplorer.ui.main.GalleryRecordEvent
 import dagger.android.AndroidInjection
+import dagger.android.AndroidInjector
+import dagger.android.DispatchingAndroidInjector
+import dagger.android.HasAndroidInjector
 import kotlinx.android.synthetic.main.activity_image_detail.*
 import kotlinx.android.synthetic.main.activity_image_detail.toolbar
 import kotlinx.android.synthetic.main.activity_main.*
 import okhttp3.HttpUrl
 import javax.inject.Inject
 
-class ImageDetailActivity : AppCompatActivity(), ImageDetailsView {
+
+class ImageDetailActivity : AppCompatActivity(), ImageDetailsView, HasAndroidInjector {
 
     @Inject
     lateinit var presenter: ImageDetailPresenter
 
-    private val handler = Handler()
-    private val mHidePart2Runnable = Runnable {
+    @Inject
+    lateinit var imageLoader: ImageLoader
 
+    @Inject
+    lateinit var androidInjector: DispatchingAndroidInjector<Any>
+
+    private val handler = Handler()
+    private val hideSystemUiRunnable = Runnable {
         fullscreenImageView.systemUiVisibility =
                 View.SYSTEM_UI_FLAG_LOW_PROFILE or
                         View.SYSTEM_UI_FLAG_FULLSCREEN or
@@ -32,23 +41,18 @@ class ImageDetailActivity : AppCompatActivity(), ImageDetailsView {
                         View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION or
                         View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
     }
-    private val mShowPart2Runnable = Runnable {
+    private val showSystemUiRunnable = Runnable {
         supportActionBar?.show()
-        fullscreen_content_controls.visibility = View.VISIBLE
+        contentDescriptionLinearLayout.show()
     }
-    private var areSystemControlsVisible: Boolean = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         AndroidInjection.inject(this)
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_image_detail)
-        setSupportActionBar(toolbar)
-        supportActionBar!!.setDisplayHomeAsUpEnabled(true)
-        supportActionBar!!.setDisplayShowTitleEnabled(false)
+        setContentView(com.molearczyk.spaceexplorer.R.layout.activity_image_detail)
+        setupToolbar(toolbar)
 
-        areSystemControlsVisible = true
-        fullscreenImageView.setOnClickListener { toggle() }
-
+        fullscreenImageView.setOnClickListener { presenter.onFullImageClick() }
 
         presenter.initView(this)
         val event = intent.getParcelableExtra<GalleryRecordEvent>("QQ")
@@ -62,56 +66,55 @@ class ImageDetailActivity : AppCompatActivity(), ImageDetailsView {
         super.onDestroy()
     }
 
-    override fun showImage(url: HttpUrl?) {
-        Glide.with(fullscreenImageView)
-                .load(url.toString())
-                .centerInside()
-                .into(fullscreenImageView)
+    override fun showImage(url: HttpUrl) {
+        imageLoader.loadCenteredImageInto(url, fullscreenImageView)
 
     }
 
-    override fun showInternetAccessError() {
-        retryButton.show()//TODO add retry logic
-        retryButton.setOnClickListener {
+    override fun androidInjector(): AndroidInjector<Any> {
+        return androidInjector
+    }
 
+    override fun showInternetAccessError() {
+        retryButton.show()
+        retryButton.setOnClickListener {
+            presenter.retryOnClick()
         }
-        noContentPromptView.setText(R.string.error_no_internet_description)
+        noContentPromptView.setText(com.molearczyk.spaceexplorer.R.string.error_no_internet_description)
         noContentPromptView.show()
     }
 
     override fun showGenericError() {
-        retryButton.show()//TODO add retry logic
-        noContentPromptView.show()
-        noContentPromptView.setText(R.string.error_generic_description)
-    }
-
-    private fun toggle() {
-        if (areSystemControlsVisible) {
-            hide()
-        } else {
-            show()
+        retryButton.show()
+        retryButton.setOnClickListener {
+            presenter.retryOnClick()
         }
+        noContentPromptView.show()
+        noContentPromptView.setText(com.molearczyk.spaceexplorer.R.string.error_generic_description)
     }
 
-    private fun hide() {
+    override fun hideSystemUi() {
         supportActionBar?.hide()
-        fullscreen_content_controls.gone()
-        areSystemControlsVisible = false
+        contentDescriptionLinearLayout.gone()
 
-        handler.removeCallbacks(mShowPart2Runnable)
-        handler.postDelayed(mHidePart2Runnable, UI_ANIMATION_DELAY)
+        handler.removeCallbacks(showSystemUiRunnable)
+        handler.postDelayed(hideSystemUiRunnable, UI_ANIMATION_DELAY)
     }
 
-    private fun show() {
+    override fun showSystemUi() {
         // Show the system bar
         fullscreenImageView.systemUiVisibility =
                 View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN or
                         View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
-        areSystemControlsVisible = true
-
         // Schedule a runnable to display UI elements after a delay
-        handler.removeCallbacks(mHidePart2Runnable)
-        handler.postDelayed(mShowPart2Runnable, UI_ANIMATION_DELAY)
+        handler.removeCallbacks(hideSystemUiRunnable)
+        handler.postDelayed(showSystemUiRunnable, UI_ANIMATION_DELAY)
+    }
+
+    private fun setupToolbar(toolbar: Toolbar) {
+        setSupportActionBar(toolbar)
+        supportActionBar!!.setDisplayHomeAsUpEnabled(true)
+        supportActionBar!!.setDisplayShowTitleEnabled(false)
     }
 
 

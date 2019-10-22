@@ -6,14 +6,13 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import androidx.core.view.updateLayoutParams
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide
 import com.molearczyk.spaceexplorer.R
 import com.molearczyk.spaceexplorer.inflate
 import com.molearczyk.spaceexplorer.network.models.GalleryRecord
 
 typealias GalleryItemClickListener = (GalleryRecord) -> Unit
 
-class GalleryAdapter(private val pictures: List<GalleryRecord>, private val clickListener: GalleryItemClickListener, gridSpan: Int, context: Context) : RecyclerView.Adapter<GalleryAdapter.GalleryItemViewHolder>() {
+class GalleryAdapter(private val pictures: List<GalleryRecord>, private val clickListener: GalleryItemClickListener, private val imageLoader: ImageLoader, gridSpan: Int, context: Context) : RecyclerView.Adapter<GalleryAdapter.GalleryItemViewHolder>() {
 
     private val itemSize = context.resources.displayMetrics.widthPixels / gridSpan
 
@@ -27,19 +26,16 @@ class GalleryAdapter(private val pictures: List<GalleryRecord>, private val clic
     override fun getItemCount(): Int = pictures.size
 
     override fun onBindViewHolder(holder: GalleryItemViewHolder, position: Int) {
-        holder.bind(pictures[position], clickListener)
+        holder.bind(pictures[position], clickListener, imageLoader)
     }
 
     class GalleryItemViewHolder(rootView: View) : RecyclerView.ViewHolder(rootView) {
 
-        fun bind(record: GalleryRecord, clickListener: GalleryItemClickListener) {
+        fun bind(record: GalleryRecord, clickListener: GalleryItemClickListener, imageLoader: ImageLoader) {
             itemView.setOnClickListener {
                 clickListener(record)
             }
-            Glide.with(itemView)
-                    .load(record.previewImage.toString())
-                    .centerCrop()
-                    .into(itemView as ImageView)
+            imageLoader.loadCroppedImageInto(record.previewImage, itemView as ImageView)
         }
 
     }

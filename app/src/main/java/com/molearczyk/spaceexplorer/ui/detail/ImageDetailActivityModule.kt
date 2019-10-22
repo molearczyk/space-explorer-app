@@ -1,4 +1,4 @@
-package com.molearczyk.spaceexplorer.ui.imagedetail
+package com.molearczyk.spaceexplorer.ui.detail
 
 import dagger.Binds
 import dagger.Module
@@ -8,8 +8,9 @@ import dagger.multibindings.IntoMap
 
 @Module(subcomponents = [ImageDetailActivitySubcomponent::class])
 abstract class ImageDetailActivityModule {
+
     @Binds
     @IntoMap
     @ClassKey(ImageDetailActivity::class)
-    abstract fun bindYourAndroidInjectorFactory(factory: ImageDetailActivitySubcomponent.Factory): AndroidInjector.Factory<*>
+    abstract fun bindImageDetailAndroidInjectorFactory(factory: ImageDetailActivitySubcomponent.Factory): AndroidInjector.Factory<*>
 }
