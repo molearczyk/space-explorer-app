@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <dimen name="activity_horizontal_margin">16dp</dimen>
+    <dimen name="activity_horizontal_margin_doubled">32dp</dimen>
     <dimen name="activity_vertical_margin">16dp</dimen>
     <dimen name="in_progress_stroke_width">5dp</dimen>
     <dimen name="in_progress_center_radius">32dp</dimen>

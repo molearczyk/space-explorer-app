@@ -41,6 +41,7 @@ class MainActivity : AppCompatActivity(), MainView {
         setContentView(R.layout.activity_main)
         setSupportActionBar(toolbar)
         toolbar.setTitle(R.string.app_name)
+        toolbar.setTitleMargin(resources.getDimensionPixelSize(R.dimen.activity_horizontal_margin_doubled), 0, 0, 0)
 
         presenter.initView(this)
 
@@ -62,11 +63,16 @@ class MainActivity : AppCompatActivity(), MainView {
                 else -> false
             }
         }
+        searchInputLayout.setEndIconOnClickListener {
+            searchInputLayout.editText!!.text.clear()
+            presenter.onQuerySearch()
+        }
         presenter.onQuerySearch()
     }
 
 
     override fun onDestroy() {
+        searchInputLayout.clearOnEndIconChangedListeners()
         presenter.onCleanup()
         super.onDestroy()
     }
@@ -91,18 +97,21 @@ class MainActivity : AppCompatActivity(), MainView {
     }
 
     override fun showInternetAccessError() {
+        noContentPromptView.setCompoundDrawablesRelativeWithIntrinsicBounds(0, R.drawable.ic_error_outline_accent_24dp, 0, 0)
         noContentPromptView.setText(R.string.error_no_internet_description)
         noContentPromptView.show()
         retryButton.show()
     }
 
     override fun showGenericError() {
+        noContentPromptView.setCompoundDrawablesRelativeWithIntrinsicBounds(0, R.drawable.ic_error_outline_accent_24dp, 0, 0)
         noContentPromptView.setText(R.string.error_generic_description)
         noContentPromptView.show()
         retryButton.show()
     }
 
     override fun showNoResultsWarning() {
+        noContentPromptView.setCompoundDrawablesRelativeWithIntrinsicBounds(0, R.drawable.ic_sentiment_dissatisfied_white_24dp, 0, 0)
         noContentPromptView.setText(R.string.warning_no_results)
         noContentPromptView.show()
     }

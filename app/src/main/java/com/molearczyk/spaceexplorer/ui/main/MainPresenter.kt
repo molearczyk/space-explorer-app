@@ -52,8 +52,8 @@ class MainPresenter @Inject constructor(private val nasaImagesRepository: NasaIm
             view.showNoResultsWarning()
         } else {
             view.hidePromptViews()
-            view.showNewImages(images)
         }
+        view.showNewImages(images)
     }
 
     private fun handleQueryError(error: Throwable) {
