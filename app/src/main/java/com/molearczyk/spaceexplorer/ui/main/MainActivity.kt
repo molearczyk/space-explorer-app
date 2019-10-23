@@ -1,7 +1,9 @@
 package com.molearczyk.spaceexplorer.ui.main
 
+import android.app.ActivityOptions
 import android.content.Intent
 import android.os.Bundle
+import android.util.Pair
 import android.view.inputmethod.EditorInfo
 import android.widget.EditText
 import androidx.appcompat.app.AppCompatActivity
@@ -30,6 +32,9 @@ class MainActivity : AppCompatActivity(), MainView {
         resources.getInteger(R.integer.main_grid_span)
     }
 
+
+    lateinit var adapter: GalleryAdapter
+
     override fun onCreate(savedInstanceState: Bundle?) {
         AndroidInjection.inject(this)
         super.onCreate(savedInstanceState)
@@ -40,7 +45,8 @@ class MainActivity : AppCompatActivity(), MainView {
         presenter.initView(this)
 
         spaceImagesRecyclerView.layoutManager = GridLayoutManager(this, gridSpan, RecyclerView.VERTICAL, false)//(this, 2)
-        spaceImagesRecyclerView.adapter = GalleryAdapter(this::navigateToFullscreen, imageLoader, presenter::onNextPageRequested, gridSpan, this)
+        adapter = GalleryAdapter(this::navigateToFullscreen, imageLoader, presenter::onNextPageRequested, gridSpan, this)
+        spaceImagesRecyclerView.adapter = adapter
 
         retryButton.setOnClickListener {
             presenter.onRetryClicked()
@@ -66,15 +72,17 @@ class MainActivity : AppCompatActivity(), MainView {
     }
 
     override fun showNewImages(newImages: List<GalleryEntry>) {
-        (spaceImagesRecyclerView.adapter as GalleryAdapter).setNewEntries(newImages)
+        adapter.setNewEntries(newImages)
     }
 
     override fun appendImages(additionalImages: List<GalleryEntry>) {
-        (spaceImagesRecyclerView.adapter as GalleryAdapter).appendEntries(additionalImages)
+        adapter.appendEntries(additionalImages)
     }
 
-    override fun navigateToFullscreen(event: GalleryEntry) {
-        startActivity(Intent(this@MainActivity, ImageDetailActivity::class.java).putGalleryEvent(GalleryEntryEvent(event.details.toString(), event.title, event.description)))
+    override fun navigateToFullscreen(event: GalleryEntryEvent) {
+        val clickedView = spaceImagesRecyclerView.layoutManager?.findViewByPosition(event.layoutPosition)!!
+        startActivity(Intent(this@MainActivity, ImageDetailActivity::class.java).putGalleryEvent(event),
+                ActivityOptions.makeSceneTransitionAnimation(this, Pair(clickedView, "image_clicked")).toBundle())
     }
 
     override fun hidePromptViews() {

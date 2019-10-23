@@ -2,6 +2,7 @@ package com.molearczyk.spaceexplorer.ui.detail
 
 import android.os.Bundle
 import android.os.Handler
+import android.view.MenuItem
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
@@ -51,7 +52,6 @@ class ImageDetailActivity : AppCompatActivity(), ImageDetailsView, HasAndroidInj
         super.onCreate(savedInstanceState)
         setContentView(com.molearczyk.spaceexplorer.R.layout.activity_image_detail)
         setupToolbar(toolbar)
-
         fullscreenImageView.setOnClickListener { presenter.onFullImageClick() }
 
         presenter.initView(this)
@@ -65,6 +65,15 @@ class ImageDetailActivity : AppCompatActivity(), ImageDetailsView, HasAndroidInj
         presenter.onCleanup()
         super.onDestroy()
     }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean =
+            when (item.itemId) {
+                android.R.id.home -> {
+                    supportFinishAfterTransition()
+                    true
+                }
+                else -> super.onOptionsItemSelected(item)
+            }
 
     override fun showImage(url: HttpUrl) {
         imageLoader.loadCenteredImageInto(url, fullscreenImageView)

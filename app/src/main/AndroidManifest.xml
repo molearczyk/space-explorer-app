@@ -23,11 +23,7 @@
         <activity
             android:name=".ui.detail.ImageDetailActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
-            android:theme="@style/AppTheme.Fullscreen">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value=".ui.main.MainActivity" />
-        </activity>
+            android:theme="@style/AppTheme.Fullscreen" />
 
         <activity android:name=".ui.main.MainActivity">
             <intent-filter>

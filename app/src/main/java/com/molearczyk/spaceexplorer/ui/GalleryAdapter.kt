@@ -9,11 +9,12 @@ import androidx.recyclerview.widget.RecyclerView
 import com.molearczyk.spaceexplorer.R
 import com.molearczyk.spaceexplorer.inflate
 import com.molearczyk.spaceexplorer.network.models.GalleryEntry
+import com.molearczyk.spaceexplorer.ui.main.GalleryEntryEvent
 
-typealias GalleryItemClickListener = (GalleryEntry) -> Unit
+typealias GalleryItemClickListener = (GalleryEntryEvent) -> Unit
 typealias GalleryNextPageListener = () -> Unit
 
-class GalleryAdapter(private val clickListener: GalleryItemClickListener, private val imageLoader: ImageLoader, private val nextPageListener: GalleryNextPageListener, gridSpan: Int, context: Context) : RecyclerView.Adapter<GalleryAdapter.GalleryItemViewHolder>() {
+class GalleryAdapter(private val clickListener: GalleryItemClickListener, private val imageLoader: ImageLoader, nextPageListener: GalleryNextPageListener, gridSpan: Int, context: Context) : RecyclerView.Adapter<GalleryAdapter.GalleryItemViewHolder>() {
 
     private val itemSize = context.resources.displayMetrics.widthPixels / gridSpan
 
@@ -45,11 +46,11 @@ class GalleryAdapter(private val clickListener: GalleryItemClickListener, privat
 
     class GalleryItemViewHolder(rootView: View) : RecyclerView.ViewHolder(rootView) {
 
-        fun bind(record: GalleryEntry, clickListener: GalleryItemClickListener, imageLoader: ImageLoader) {
+        fun bind(galleryEntry: GalleryEntry, clickListener: GalleryItemClickListener, imageLoader: ImageLoader) {
             itemView.setOnClickListener {
-                clickListener(record)
+                clickListener(GalleryEntryEvent(galleryEntry.details.toString(), galleryEntry.title, galleryEntry.description, layoutPosition))
             }
-            imageLoader.loadCroppedImageInto(record.previewImage, itemView as ImageView)
+            imageLoader.loadCroppedImageInto(galleryEntry.previewImage, itemView as ImageView)
         }
 
     }
