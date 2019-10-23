@@ -4,6 +4,7 @@ import android.text.Editable
 import android.util.Log
 import com.molearczyk.spaceexplorer.isNetworkError
 import com.molearczyk.spaceexplorer.network.NasaImagesRepository
+import com.molearczyk.spaceexplorer.network.models.GalleryEntry
 import com.molearczyk.spaceexplorer.ui.BasePresenter
 import com.molearczyk.spaceexplorer.ui.MainView
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -15,22 +16,57 @@ class MainPresenter @Inject constructor(private val nasaImagesRepository: NasaIm
     fun onQuerySearch(query: Editable? = null) {
         subscriptions.add(nasaImagesRepository
                 .fetchImages(query?.toString()?.takeIf(String::isNotBlank))
-                .toList()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(view::showImages) {
+                .subscribe(this::handleResult, this::handleQueryError))
+    }
+
+    fun onRetryClicked() {
+        subscriptions.add(nasaImagesRepository
+                .redoQuery()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(this::handleResult, this::handleQueryError))
+
+    }
+
+    fun onNextPageRequested() {
+        subscriptions.add(nasaImagesRepository
+                .fetchNextPage()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(view::appendImages) {
                     if (it.isNetworkError()) {
-                        Log.w("MainActivity", "Caught network error", it)
+                        Log.w("MainPresenter", "Caught network error", it)
                         view.showInternetAccessError()
                     } else {
-                        Log.e("MainActivity", "Caught generic error", it)
+                        Log.e("MainPresenter", "Caught generic error", it)
                         view.showGenericError()
                     }
                 })
 
     }
 
-    fun onRetryClicked() {}
+    private fun handleResult(images: List<GalleryEntry>) {
+        if (images.isEmpty()) {
+            view.showNoResultsWarning()
+        } else {
+            view.hidePromptViews()
+            view.showNewImages(images)
+        }
+    }
 
+    private fun handleQueryError(error: Throwable) {
+        if (error.isNetworkError()) {
+            Log.w("MainPresenter", "Caught network error", error)
+            view.showInternetAccessError()
+            view.showNewImages(emptyList())
+        } else {
+            Log.e("MainPresenter", "Caught generic error", error)
+            view.showGenericError()
+            view.showNewImages(emptyList())
+        }
+
+    }
 
 }

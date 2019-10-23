@@ -4,7 +4,7 @@ data class CollectionContainer(val collection: CollectionContent)
 
 data class CollectionContent(val href: String,
                              val items: List<CollectionItem>,
-                             val links: List<Link>,
+                             val links: List<Link>?,
                              val metadata: Metadata,
                              val version: String)
 
@@ -19,9 +19,9 @@ data class Link(val href: String,
 
 data class Metadata(val total_hits: Int)
 
-data class DataItem(val center: String,
+data class DataItem(val center: String?,
                     val date_created: String,
-                    val description: String,
+                    val description: String?,
                     val keywords: List<String>?,
                     val media_type: String,
                     val nasa_id: String,

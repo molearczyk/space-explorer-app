@@ -1,14 +1,20 @@
 package com.molearczyk.spaceexplorer.ui
 
-import com.molearczyk.spaceexplorer.network.models.GalleryRecord
+import com.molearczyk.spaceexplorer.network.models.GalleryEntry
 
 interface MainView {
 
-    fun showImages(newImages: List<GalleryRecord>)
+    fun showNewImages(newImages: List<GalleryEntry>)
 
-    fun navigateToFullscreen(event: GalleryRecord)
+    fun appendImages(additionalImages: List<GalleryEntry>)
+
+    fun navigateToFullscreen(event: GalleryEntry)
 
     fun showInternetAccessError()
 
     fun showGenericError()
+
+    fun showNoResultsWarning()
+
+    fun hidePromptViews()
 }

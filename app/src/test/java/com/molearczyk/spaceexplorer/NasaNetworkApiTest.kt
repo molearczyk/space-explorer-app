@@ -2,7 +2,7 @@ package com.molearczyk.spaceexplorer
 
 import com.molearczyk.spaceexplorer.network.NasaImagesRepository
 import com.molearczyk.spaceexplorer.network.NetworkModule
-import com.molearczyk.spaceexplorer.network.models.GalleryRecord
+import com.molearczyk.spaceexplorer.network.models.GalleryEntry
 import com.molearczyk.spaceexplorer.network.models.ServerProperties
 import com.molearczyk.spaceexplorer.network.nasa.CollectionContainer
 import com.molearczyk.spaceexplorer.network.nasa.ImagesNasaNetworkApi
@@ -20,7 +20,6 @@ class NasaNetworkApiTest {
         val nasaImageNetworkApi = initNetworkApi()
 
         nasaImageNetworkApi.search().test().awaitCount(1).assertValue {
-            print(it)
             it.collection.items.isNotEmpty()
         }
 
@@ -32,7 +31,6 @@ class NasaNetworkApiTest {
 
         NasaImagesRepository(nasaImageNetworkApi)
                 .fetchImages()
-                .toList()
                 .test()
                 .awaitCount(1)
                 .assertValue {
@@ -40,10 +38,9 @@ class NasaNetworkApiTest {
                 }
 
         Single.zip(NasaImagesRepository(nasaImageNetworkApi)
-                .fetchImages()
-                .toList(),
+                .fetchImages(),
                 nasaImageNetworkApi.search(),
-                BiFunction { repositoryModels: MutableList<GalleryRecord>, nasaModels: CollectionContainer ->
+                BiFunction { repositoryModels: List<GalleryEntry>, nasaModels: CollectionContainer ->
                     repositoryModels.size == nasaModels.collection.items.size
                 })
                 .test()
@@ -68,6 +65,25 @@ class NasaNetworkApiTest {
                             it.keywords?.contains("Moon") ?: false
                         }
                     } && it.any { it.data.any { "Moon" in it.title } }
+                }
+
+
+    }
+
+    @Test
+    fun `querying nasa api with a 'Moon' keyword and asking for 2nd page returns keyword and titles with Moon successfully`() {
+        val nasaImageNetworkApi = initNetworkApi()
+
+        nasaImageNetworkApi.search(keywords = "Moon", page = 2)
+                .test()
+                .awaitCount(1)
+                .assertValue {
+                    print(it)
+                    it.collection.items.any {
+                        it.data.any {
+                            it.keywords?.contains("Moon") ?: false
+                        }
+                    } && it.collection.links?.find { it.prompt == "Previous" } != null
                 }
 
 
@@ -116,7 +132,7 @@ class NasaNetworkApiTest {
     private fun initNetworkApi(): ImagesNasaNetworkApi {
         val networkModule = NetworkModule()
         val serverProperties: ServerProperties = networkModule.provideServerProperties()
-        val retrofit: Retrofit = networkModule.provideRetrofit(serverProperties)
+        val retrofit: Retrofit = networkModule.provideRetrofit(serverProperties, networkModule.provideOkHttpClient())
         return networkModule.provideNasaImageNetworkApi(retrofit)
     }
 

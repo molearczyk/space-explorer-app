@@ -8,7 +8,7 @@ import androidx.core.text.scale
 import com.molearczyk.spaceexplorer.isNetworkError
 import com.molearczyk.spaceexplorer.network.NasaImagesRepository
 import com.molearczyk.spaceexplorer.ui.BasePresenter
-import com.molearczyk.spaceexplorer.ui.main.GalleryRecordEvent
+import com.molearczyk.spaceexplorer.ui.main.GalleryEntryEvent
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import okhttp3.HttpUrl.Companion.toHttpUrl
@@ -19,7 +19,7 @@ class ImageDetailPresenter @Inject constructor(private val nasaImagesRepository:
 
     private var areSystemControlsVisible: Boolean = true
 
-    fun fetchImageDetail(event: GalleryRecordEvent) {
+    fun fetchImageDetail(event: GalleryEntryEvent) {
         subscriptions.add(nasaImagesRepository
                 .fetchImageAddress(event.nasaIdentifier.toHttpUrl())
                 .subscribeOn(Schedulers.io())
@@ -36,7 +36,7 @@ class ImageDetailPresenter @Inject constructor(private val nasaImagesRepository:
                 })
     }
 
-    fun resolveDescription(event: GalleryRecordEvent): SpannableStringBuilder =
+    fun resolveDescription(event: GalleryEntryEvent): SpannableStringBuilder =
             SpannableStringBuilder()
                     .scale(1.2f) {
                         bold {

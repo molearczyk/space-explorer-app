@@ -4,4 +4,4 @@ import android.os.Parcelable
 import kotlinx.android.parcel.Parcelize
 
 @Parcelize
-data class GalleryRecordEvent(val nasaIdentifier: String, val title: String, val description: String) : Parcelable
+data class GalleryEntryEvent(val nasaIdentifier: String, val title: String, val description: String) : Parcelable

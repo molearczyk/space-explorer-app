@@ -4,4 +4,5 @@
     <string name="error_no_internet_description">The Internet is not available at this time.\nConnect to the Internet and try again.</string>
     <string name="error_generic_description">An error occurred, please try again later.</string>
     <string name="error_retry_button">Retry</string>
+    <string name="warning_no_results">Your query yielded no results.\n Please try a different query.</string>
 </resources>

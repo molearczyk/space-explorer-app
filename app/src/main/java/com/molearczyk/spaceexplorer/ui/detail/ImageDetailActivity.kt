@@ -5,10 +5,10 @@ import android.os.Handler
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
+import com.molearczyk.spaceexplorer.getGalleryEvent
 import com.molearczyk.spaceexplorer.gone
 import com.molearczyk.spaceexplorer.show
 import com.molearczyk.spaceexplorer.ui.ImageLoader
-import com.molearczyk.spaceexplorer.ui.main.GalleryRecordEvent
 import dagger.android.AndroidInjection
 import dagger.android.AndroidInjector
 import dagger.android.DispatchingAndroidInjector
@@ -55,8 +55,8 @@ class ImageDetailActivity : AppCompatActivity(), ImageDetailsView, HasAndroidInj
         fullscreenImageView.setOnClickListener { presenter.onFullImageClick() }
 
         presenter.initView(this)
-        val event = intent.getParcelableExtra<GalleryRecordEvent>("QQ")
-        presenter.fetchImageDetail(event!!)
+        val event = intent.getGalleryEvent()
+        presenter.fetchImageDetail(event)
 
         imageDescriptionTextView.text = presenter.resolveDescription(event)
     }

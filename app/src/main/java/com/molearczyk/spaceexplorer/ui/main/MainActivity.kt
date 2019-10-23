@@ -7,9 +7,8 @@ import android.widget.EditText
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.molearczyk.spaceexplorer.R
-import com.molearczyk.spaceexplorer.network.models.GalleryRecord
-import com.molearczyk.spaceexplorer.show
+import com.molearczyk.spaceexplorer.*
+import com.molearczyk.spaceexplorer.network.models.GalleryEntry
 import com.molearczyk.spaceexplorer.ui.GalleryAdapter
 import com.molearczyk.spaceexplorer.ui.ImageLoader
 import com.molearczyk.spaceexplorer.ui.MainView
@@ -27,7 +26,7 @@ class MainActivity : AppCompatActivity(), MainView {
     @Inject
     lateinit var imageLoader: ImageLoader
 
-    private val gridSpan: Int by lazy {
+    private val gridSpan: Int by lazyOnMainThread {
         resources.getInteger(R.integer.main_grid_span)
     }
 
@@ -41,11 +40,17 @@ class MainActivity : AppCompatActivity(), MainView {
         presenter.initView(this)
 
         spaceImagesRecyclerView.layoutManager = GridLayoutManager(this, gridSpan, RecyclerView.VERTICAL, false)//(this, 2)
+        spaceImagesRecyclerView.adapter = GalleryAdapter(this::navigateToFullscreen, imageLoader, presenter::onNextPageRequested, gridSpan, this)
+
+        retryButton.setOnClickListener {
+            presenter.onRetryClicked()
+        }
 
         searchInputLayout.editText!!.setOnEditorActionListener { view, actionId, _ ->
             when (actionId) {
                 EditorInfo.IME_ACTION_SEARCH -> {
                     presenter.onQuerySearch((view as EditText).editableText)
+                    view.hideKeyboard()
                     true
                 }
                 else -> false
@@ -60,27 +65,38 @@ class MainActivity : AppCompatActivity(), MainView {
         super.onDestroy()
     }
 
-    override fun showImages(newImages: List<GalleryRecord>) {
-        spaceImagesRecyclerView.adapter = GalleryAdapter(newImages, this::navigateToFullscreen, imageLoader, gridSpan, this)
+    override fun showNewImages(newImages: List<GalleryEntry>) {
+        (spaceImagesRecyclerView.adapter as GalleryAdapter).setNewEntries(newImages)
     }
 
-    override fun navigateToFullscreen(event: GalleryRecord) {
-        startActivity(Intent(this@MainActivity, ImageDetailActivity::class.java).putExtra("QQ", GalleryRecordEvent(event.details.toString(), event.title, event.description)))
+    override fun appendImages(additionalImages: List<GalleryEntry>) {
+        (spaceImagesRecyclerView.adapter as GalleryAdapter).appendEntries(additionalImages)
+    }
+
+    override fun navigateToFullscreen(event: GalleryEntry) {
+        startActivity(Intent(this@MainActivity, ImageDetailActivity::class.java).putGalleryEvent(GalleryEntryEvent(event.details.toString(), event.title, event.description)))
+    }
+
+    override fun hidePromptViews() {
+        retryButton.gone()
+        noContentPromptView.gone()
     }
 
     override fun showInternetAccessError() {
-        retryButton.show()//TODO add retry logic
-        retryButton.setOnClickListener {
-
-        }
         noContentPromptView.setText(R.string.error_no_internet_description)
         noContentPromptView.show()
+        retryButton.show()
     }
 
     override fun showGenericError() {
-        retryButton.show()//TODO add retry logic
-        noContentPromptView.show()
         noContentPromptView.setText(R.string.error_generic_description)
+        noContentPromptView.show()
+        retryButton.show()
+    }
+
+    override fun showNoResultsWarning() {
+        noContentPromptView.setText(R.string.warning_no_results)
+        noContentPromptView.show()
     }
 
 }

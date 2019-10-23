@@ -10,7 +10,7 @@ import retrofit2.http.Url
 interface ImagesNasaNetworkApi {
 
     @GET("search?media_type=image")
-    fun search(@Query("q") keywords: String? = null): Single<CollectionContainer>
+    fun search(@Query("q") keywords: String? = null, @Query("page") page: Int? = null): Single<CollectionContainer>
 
     @GET
     fun fetchImageLinkContainer(@Url fullPath: HttpUrl): Single<List<String>>
