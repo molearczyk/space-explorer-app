@@ -22,6 +22,10 @@ fun View.gone() {
     this.visibility = View.GONE
 }
 
+fun View.invisible() {
+    this.visibility = View.INVISIBLE
+}
+
 fun <T> lazyOnMainThread(initializer: () -> T): Lazy<T> =
         lazy(LazyThreadSafetyMode.NONE, initializer)
 

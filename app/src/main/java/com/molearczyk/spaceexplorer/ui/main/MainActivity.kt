@@ -17,6 +17,7 @@ import com.molearczyk.spaceexplorer.ui.MainView
 import com.molearczyk.spaceexplorer.ui.detail.ImageDetailActivity
 import dagger.android.AndroidInjection
 import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.layout_error_state.*
 import javax.inject.Inject
 
 

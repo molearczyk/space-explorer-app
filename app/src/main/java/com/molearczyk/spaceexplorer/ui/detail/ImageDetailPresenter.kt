@@ -1,6 +1,8 @@
 package com.molearczyk.spaceexplorer.ui.detail
 
 import android.text.SpannableStringBuilder
+import android.text.TextPaint
+import android.text.TextUtils
 import android.util.Log
 import androidx.core.text.HtmlCompat
 import androidx.core.text.bold
@@ -16,10 +18,19 @@ import javax.inject.Inject
 
 class ImageDetailPresenter @Inject constructor(private val nasaImagesRepository: NasaImagesRepository) : BasePresenter<ImageDetailsView>() {
 
+    private lateinit var event: GalleryEntryEvent
 
     private var areSystemControlsVisible: Boolean = true
 
-    fun fetchImageDetail(event: GalleryEntryEvent) {
+    private var isDescriptionExpanded = false
+
+    private lateinit var description: Description
+
+    fun init(event: GalleryEntryEvent) {
+        this.event = event
+    }
+
+    fun fetchImageDetail() {
         subscriptions.add(nasaImagesRepository
                 .fetchImageAddress(event.nasaIdentifier.toHttpUrl())
                 .subscribeOn(Schedulers.io())
@@ -36,15 +47,14 @@ class ImageDetailPresenter @Inject constructor(private val nasaImagesRepository:
                 })
     }
 
-    fun resolveDescription(event: GalleryEntryEvent): SpannableStringBuilder =
+
+    fun resolveTitle(): CharSequence =
             SpannableStringBuilder()
-                    .scale(1.2f) {
+                    .scale(1.4f) {
                         bold {
                             append(event.title)
                         }
                     }
-                    .append("\n")
-                    .append(HtmlCompat.fromHtml(event.description, HtmlCompat.FROM_HTML_MODE_COMPACT))
 
     fun onFullImageClick() {
         if (areSystemControlsVisible) {
@@ -56,7 +66,29 @@ class ImageDetailPresenter @Inject constructor(private val nasaImagesRepository:
     }
 
     fun retryOnClick() {
-        //TODO retry logic
+        fetchImageDetail()
     }
 
+    fun onExpandClick() {
+        isDescriptionExpanded = !isDescriptionExpanded
+        if (isDescriptionExpanded) {
+            view.transitionToFullDescription(description.longText)
+        } else {
+            view.transitionToShortDescription(description.shortText)
+        }
+    }
+
+    fun resolveDescriptionSizing(destinationPaint: TextPaint, availableTextSpace: Float): Description =
+            when {
+                this::description.isInitialized -> description
+                else -> {
+                    val decodedDescription = HtmlCompat.fromHtml(event.description, HtmlCompat.FROM_HTML_MODE_COMPACT)
+                    description = if (destinationPaint.measureText(decodedDescription.toString()) >= availableTextSpace) {
+                        Description.Expandable(TextUtils.ellipsize(decodedDescription, destinationPaint, availableTextSpace, TextUtils.TruncateAt.END), decodedDescription)
+                    } else {
+                        Description.NonExpandable(decodedDescription)
+                    }
+                    description
+                }
+            }
 }

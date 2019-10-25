@@ -13,4 +13,8 @@ interface ImageDetailsView {
     fun hideSystemUi()
 
     fun showSystemUi()
+
+    fun transitionToShortDescription(shortDescription: CharSequence)
+
+    fun transitionToFullDescription(fullDescription: CharSequence)
 }
