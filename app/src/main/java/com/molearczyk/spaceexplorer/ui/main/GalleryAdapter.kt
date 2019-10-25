@@ -1,4 +1,4 @@
-package com.molearczyk.spaceexplorer.ui
+package com.molearczyk.spaceexplorer.ui.main
 
 import android.content.Context
 import android.view.View
@@ -7,9 +7,9 @@ import android.widget.ImageView
 import androidx.core.view.updateLayoutParams
 import androidx.recyclerview.widget.RecyclerView
 import com.molearczyk.spaceexplorer.R
+import com.molearczyk.spaceexplorer.imageloading.ImageLoader
 import com.molearczyk.spaceexplorer.inflate
 import com.molearczyk.spaceexplorer.network.models.GalleryEntry
-import com.molearczyk.spaceexplorer.ui.main.GalleryEntryEvent
 
 typealias GalleryItemClickListener = (GalleryEntryEvent) -> Unit
 typealias GalleryNextPageListener = () -> Unit

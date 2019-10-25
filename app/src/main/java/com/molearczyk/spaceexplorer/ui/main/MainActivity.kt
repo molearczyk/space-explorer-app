@@ -10,10 +10,8 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.molearczyk.spaceexplorer.*
+import com.molearczyk.spaceexplorer.imageloading.ImageLoader
 import com.molearczyk.spaceexplorer.network.models.GalleryEntry
-import com.molearczyk.spaceexplorer.ui.GalleryAdapter
-import com.molearczyk.spaceexplorer.ui.ImageLoader
-import com.molearczyk.spaceexplorer.ui.MainView
 import com.molearczyk.spaceexplorer.ui.detail.ImageDetailActivity
 import dagger.android.AndroidInjection
 import kotlinx.android.synthetic.main.activity_main.*
@@ -66,9 +64,9 @@ class MainActivity : AppCompatActivity(), MainView {
         }
         searchInputLayout.setEndIconOnClickListener {
             searchInputLayout.editText!!.text.clear()
-            presenter.onQuerySearch()
+            presenter.onDefaultContent()
         }
-        presenter.onQuerySearch()
+        presenter.onDefaultContent()
     }
 
 

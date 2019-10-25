@@ -1,4 +1,4 @@
-package com.molearczyk.spaceexplorer.ui
+package com.molearczyk.spaceexplorer.imageloading
 
 import android.app.Activity
 import android.widget.ImageView

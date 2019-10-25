@@ -5,7 +5,7 @@ data class CollectionContainer(val collection: CollectionContent)
 data class CollectionContent(val href: String,
                              val items: List<CollectionItem>,
                              val links: List<Link>?,
-                             val metadata: Metadata,
+                             val metadata: Metadata?,
                              val version: String)
 
 data class CollectionItem(val data: List<DataItem>,

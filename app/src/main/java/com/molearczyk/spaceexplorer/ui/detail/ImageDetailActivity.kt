@@ -13,7 +13,7 @@ import androidx.core.view.isInvisible
 import androidx.core.view.isVisible
 import androidx.transition.TransitionManager
 import com.molearczyk.spaceexplorer.*
-import com.molearczyk.spaceexplorer.ui.ImageLoader
+import com.molearczyk.spaceexplorer.imageloading.ImageLoader
 import dagger.android.AndroidInjection
 import dagger.android.AndroidInjector
 import dagger.android.DispatchingAndroidInjector

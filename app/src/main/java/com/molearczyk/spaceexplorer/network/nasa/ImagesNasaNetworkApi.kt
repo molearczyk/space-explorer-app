@@ -12,6 +12,9 @@ interface ImagesNasaNetworkApi {
     @GET("search?media_type=image")
     fun search(@Query("q") keywords: String? = null, @Query("page") page: Int? = null): Single<CollectionContainer>
 
+    @GET("https://images-assets.nasa.gov/popular.json")
+    fun fetchPopular(): Single<CollectionContainer>
+
     @GET
     fun fetchImageLinkContainer(@Url fullPath: HttpUrl): Single<List<String>>
 

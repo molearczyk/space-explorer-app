@@ -18,6 +18,18 @@ class NasaImagesRepository @Inject constructor(private val imageSearchApi: Image
 
     private var lastRequest: RequestRepresentation? = null
 
+    fun fetchMostPopularImages(): Single<List<GalleryEntry>> {
+        return imageSearchApi.fetchPopular()
+                .map(CollectionContainer::collection)
+                .flatMapPublisher { Flowable.fromIterable(it.items) }
+                .map {
+                    GalleryEntry(it.links.find { it.rel == PreviewLink }!!.href.toHttpUrl(), it.href.toHttpUrl(), it.data[0].title, it.data[0].description
+                            ?: "")
+                }
+                .toList()
+
+    }
+
     fun fetchImages(queryKeywords: String? = null, page: Int? = null): Single<List<GalleryEntry>> {
         lastRequest = RequestRepresentation(queryKeywords, page)
         return Maybe.concat<CollectionContainer>(

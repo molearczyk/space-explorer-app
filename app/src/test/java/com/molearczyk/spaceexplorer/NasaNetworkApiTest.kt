@@ -128,6 +128,18 @@ class NasaNetworkApiTest {
                 }
     }
 
+    @Test
+    fun `querying nasa api for most popular images returns container of image links successfully`() {
+        val nasaImageNetworkApi = initNetworkApi()
+        nasaImageNetworkApi.fetchPopular()
+                .test()
+                .awaitCount(1)
+                .assertValue {
+                    print(it)
+                    true
+                }
+    }
+
 
     private fun initNetworkApi(): ImagesNasaNetworkApi {
         val networkModule = NetworkModule()

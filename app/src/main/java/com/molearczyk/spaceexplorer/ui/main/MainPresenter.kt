@@ -6,12 +6,19 @@ import com.molearczyk.spaceexplorer.isNetworkError
 import com.molearczyk.spaceexplorer.network.NasaImagesRepository
 import com.molearczyk.spaceexplorer.network.models.GalleryEntry
 import com.molearczyk.spaceexplorer.ui.BasePresenter
-import com.molearczyk.spaceexplorer.ui.MainView
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import javax.inject.Inject
 
 class MainPresenter @Inject constructor(private val nasaImagesRepository: NasaImagesRepository) : BasePresenter<MainView>() {
+
+    fun onDefaultContent() {
+        subscriptions.add(nasaImagesRepository
+                .fetchMostPopularImages()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(this::handleResult, this::handleQueryError))
+    }
 
     fun onQuerySearch(query: Editable? = null) {
         subscriptions.add(nasaImagesRepository

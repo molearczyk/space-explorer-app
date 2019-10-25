@@ -1,7 +1,6 @@
-package com.molearczyk.spaceexplorer.ui
+package com.molearczyk.spaceexplorer.ui.main
 
 import com.molearczyk.spaceexplorer.network.models.GalleryEntry
-import com.molearczyk.spaceexplorer.ui.main.GalleryEntryEvent
 
 interface MainView {
 

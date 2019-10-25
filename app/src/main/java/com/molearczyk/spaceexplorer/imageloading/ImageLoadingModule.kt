@@ -1,7 +1,5 @@
-package com.molearczyk.spaceexplorer
+package com.molearczyk.spaceexplorer.imageloading
 
-import com.molearczyk.spaceexplorer.ui.GlideImageLoader
-import com.molearczyk.spaceexplorer.ui.ImageLoader
 import dagger.Module
 import dagger.Provides
 

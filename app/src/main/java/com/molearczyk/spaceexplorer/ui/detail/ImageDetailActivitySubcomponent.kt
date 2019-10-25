@@ -1,6 +1,6 @@
 package com.molearczyk.spaceexplorer.ui.detail
 
-import com.molearczyk.spaceexplorer.ImageLoadingModule
+import com.molearczyk.spaceexplorer.imageloading.ImageLoadingModule
 import dagger.Subcomponent
 import dagger.android.AndroidInjector
 
