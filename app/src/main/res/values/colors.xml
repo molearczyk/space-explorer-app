@@ -1,16 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#3F51B5</color>
-    <color name="colorPrimaryDark">#303F9F</color>
+    <color name="colorPrimary">#1a237e</color>
+    <color name="colorPrimaryDark">#000051</color>
     <color name="primaryLight">#C5CAE9</color>
     <color name="colorAccent">#FC3D21</color>
     <color name="colorOnPrimary">@android:color/white</color>
 
     <color name="primaryText">#FFFFFF</color>
-    <color name="secondaryText">#B5B5B5</color>
+    <color name="secondaryText">#F5F5F5</color>
 
     <color name="icons">#FFFFFF</color>
-    <color name="divider">#BDBDBD</color>
+    <color name="divider">#999fa8da</color>
 
     <color name="black_overlay">#77000000</color>
+    <color name="searchBackgroundOverlay">#55FFFFFF</color>
+    <color name="colorSurface">@color/primaryLight</color>
 </resources>

@@ -1,12 +1,9 @@
 package com.molearczyk.spaceexplorer.ui.detail
 
-import android.text.SpannableStringBuilder
 import android.text.TextPaint
 import android.text.TextUtils
 import android.util.Log
 import androidx.core.text.HtmlCompat
-import androidx.core.text.bold
-import androidx.core.text.scale
 import com.molearczyk.spaceexplorer.isNetworkError
 import com.molearczyk.spaceexplorer.network.NasaImagesRepository
 import com.molearczyk.spaceexplorer.ui.BasePresenter
@@ -48,13 +45,7 @@ class ImageDetailPresenter @Inject constructor(private val nasaImagesRepository:
     }
 
 
-    fun resolveTitle(): CharSequence =
-            SpannableStringBuilder()
-                    .scale(1.4f) {
-                        bold {
-                            append(event.title)
-                        }
-                    }
+    fun resolveTitle(): CharSequence = event.title
 
     fun onFullImageClick() {
         if (areSystemControlsVisible) {

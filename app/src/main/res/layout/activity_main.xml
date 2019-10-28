@@ -11,6 +11,7 @@
         android:id="@+id/spaceImagesRecyclerView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:background="@color/divider"
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
         tools:itemCount="10"
         tools:listitem="@layout/item_gallery_view_holder" />
@@ -18,12 +19,12 @@
     <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:elevation="4dp">
+        app:liftOnScroll="true"
+        app:liftOnScrollTargetViewId="@id/spaceImagesRecyclerView">
 
         <com.google.android.material.appbar.CollapsingToolbarLayout
             android:layout_width="match_parent"
             android:layout_height="?android:actionBarSize"
-            app:contentScrim="?attr/colorPrimary"
             app:layout_scrollFlags="scroll|snap"
             app:titleEnabled="false">
 
@@ -41,14 +42,15 @@
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/searchInputLayout"
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/activity_horizontal_margin"
-            android:layout_marginTop="4dp"
+            android:layout_marginTop="8dp"
             android:layout_marginEnd="@dimen/activity_horizontal_margin"
-            android:layout_marginBottom="4dp"
+            android:layout_marginBottom="8dp"
             android:gravity="center_horizontal"
+            app:boxBackgroundColor="@color/searchBackgroundOverlay"
             app:boxStrokeColor="@android:color/white"
             app:endIconMode="clear_text"
             app:hintEnabled="false"
@@ -58,9 +60,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:cursorVisible="true"
-                android:drawableStart="@drawable/ic_search_black_24dp"
+                android:drawableStart="@drawable/ic_search_white_24dp"
                 android:drawablePadding="4dp"
-                android:drawableTint="?attr/colorOnPrimary"
                 android:hint="@string/search_prompt"
                 android:imeOptions="actionSearch"
                 android:inputType="text"
