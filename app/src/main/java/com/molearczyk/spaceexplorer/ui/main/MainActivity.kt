@@ -32,7 +32,7 @@ class MainActivity : AppCompatActivity(), MainView {
     }
 
 
-    lateinit var adapter: GalleryAdapter
+    private lateinit var adapter: GalleryAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         AndroidInjection.inject(this)

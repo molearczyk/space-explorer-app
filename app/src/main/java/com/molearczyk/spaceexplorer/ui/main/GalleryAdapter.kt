@@ -50,7 +50,7 @@ class GalleryAdapter(private val clickListener: GalleryItemClickListener, privat
             itemView.setOnClickListener {
                 clickListener(GalleryEntryEvent(galleryEntry.details.toString(), galleryEntry.title, galleryEntry.description, layoutPosition))
             }
-            imageLoader.loadCroppedImageInto(galleryEntry.previewImage, itemView as ImageView)
+            imageLoader.loadThumbnailImageInto(galleryEntry.previewImage, itemView as ImageView)
         }
 
     }

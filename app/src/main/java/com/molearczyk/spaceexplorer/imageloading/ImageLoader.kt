@@ -5,7 +5,7 @@ import okhttp3.HttpUrl
 
 interface ImageLoader {
 
-    fun loadCroppedImageInto(url: HttpUrl, target: ImageView)
+    fun loadThumbnailImageInto(url: HttpUrl, target: ImageView)
 
     fun loadCenteredImageInto(url: HttpUrl, target: ImageView)
 
