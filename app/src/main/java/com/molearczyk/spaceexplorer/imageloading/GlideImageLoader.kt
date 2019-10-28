@@ -17,7 +17,7 @@ class GlideImageLoader : ImageLoader {
                 .into(target)
     }
 
-    override fun loadCenteredImageInto(url: HttpUrl, target: ImageView) {
+    override fun loadFullImageInto(url: HttpUrl, target: ImageView) {
         Glide.with(target.context as Activity)
                 .load(url.toString())
                 .placeholder(createProgressDrawable(target.context))
@@ -30,7 +30,7 @@ class GlideImageLoader : ImageLoader {
                 val resources = context.resources
                 strokeWidth = resources.getDimension(R.dimen.in_progress_stroke_width)
                 centerRadius = resources.getDimension(R.dimen.in_progress_center_radius)
-                setColorSchemeColors(ContextCompat.getColor(context, R.color.colorAccent))
+                setColorSchemeColors(ContextCompat.getColor(context, R.color.colorPrimary))
                 start()
             }
 

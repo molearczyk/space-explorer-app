@@ -30,10 +30,7 @@
         android:id="@+id/fullscreenImageView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:gravity="center"
         android:keepScreenOn="true"
-        android:scaleType="centerInside"
-        android:transitionName="image_clicked"
         tools:src="@tools:sample/backgrounds/scenic" />
 
     <FrameLayout

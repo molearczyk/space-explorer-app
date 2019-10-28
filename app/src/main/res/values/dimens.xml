@@ -4,6 +4,6 @@
     <dimen name="activity_horizontal_margin_doubled">32dp</dimen>
     <dimen name="activity_vertical_margin">16dp</dimen>
     <dimen name="in_progress_stroke_width">5dp</dimen>
-    <dimen name="in_progress_center_radius">32dp</dimen>
+    <dimen name="in_progress_center_radius">16dp</dimen>
     <integer name="main_grid_span">2</integer>
 </resources>

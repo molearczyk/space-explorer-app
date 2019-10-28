@@ -14,18 +14,23 @@ import com.molearczyk.spaceexplorer.network.models.GalleryEntry
 typealias GalleryItemClickListener = (GalleryEntryEvent) -> Unit
 typealias GalleryNextPageListener = () -> Unit
 
-class GalleryAdapter(private val clickListener: GalleryItemClickListener, private val imageLoader: ImageLoader, nextPageListener: GalleryNextPageListener, gridSpan: Int, context: Context) : RecyclerView.Adapter<GalleryAdapter.GalleryItemViewHolder>() {
+class GalleryAdapter(private val clickListener: GalleryItemClickListener,
+                     private val imageLoader: ImageLoader,
+                     nextPageListener: GalleryNextPageListener,
+                     gridSpan: Int,
+                     context: Context) : RecyclerView.Adapter<GalleryAdapter.GalleryItemViewHolder>() {
 
     private val itemSize = context.resources.displayMetrics.widthPixels / gridSpan
 
     private val contentTracker: ListContentTracker = ListContentTracker(nextPageListener, gridSpan)
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): GalleryItemViewHolder = GalleryItemViewHolder(parent.inflate(R.layout.item_gallery_view_holder).apply {
-        this.updateLayoutParams {
-            width = itemSize
-            height = itemSize
-        }
-    })
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): GalleryItemViewHolder =
+            GalleryItemViewHolder(parent.inflate(R.layout.item_gallery_view_holder).apply {
+                this.updateLayoutParams {
+                    width = itemSize
+                    height = itemSize
+                }
+            })
 
     override fun getItemCount(): Int = contentTracker.size
 

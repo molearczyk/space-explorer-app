@@ -7,7 +7,7 @@ interface ImageLoader {
 
     fun loadThumbnailImageInto(url: HttpUrl, target: ImageView)
 
-    fun loadCenteredImageInto(url: HttpUrl, target: ImageView)
+    fun loadFullImageInto(url: HttpUrl, target: ImageView)
 
 }
 

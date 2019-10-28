@@ -3,7 +3,6 @@ package com.molearczyk.spaceexplorer.ui.main
 import android.app.ActivityOptions
 import android.content.Intent
 import android.os.Bundle
-import android.util.Pair
 import android.view.inputmethod.EditorInfo
 import android.widget.EditText
 import androidx.appcompat.app.AppCompatActivity
@@ -87,7 +86,7 @@ class MainActivity : AppCompatActivity(), MainView {
     override fun navigateToFullscreen(event: GalleryEntryEvent) {
         val clickedView = spaceImagesRecyclerView.layoutManager?.findViewByPosition(event.layoutPosition)!!
         startActivity(Intent(this@MainActivity, ImageDetailActivity::class.java).putGalleryEvent(event),
-                ActivityOptions.makeSceneTransitionAnimation(this, Pair(clickedView, "image_clicked")).toBundle())
+                ActivityOptions.makeScaleUpAnimation(clickedView, 0, clickedView.height / 2, clickedView.width, clickedView.height).toBundle())
     }
 
     override fun hidePromptViews() {

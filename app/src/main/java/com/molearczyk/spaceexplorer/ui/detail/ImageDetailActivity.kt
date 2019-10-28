@@ -96,7 +96,7 @@ class ImageDetailActivity : AppCompatActivity(), ImageDetailsView, HasAndroidInj
 
     override fun showImage(url: HttpUrl) {
         retryContentInclude.gone()
-        imageLoader.loadCenteredImageInto(url, fullscreenImageView)
+        imageLoader.loadFullImageInto(url, fullscreenImageView)
     }
 
     override fun androidInjector(): AndroidInjector<Any> {
