@@ -9,8 +9,9 @@ import io.reactivex.Single
 import okhttp3.HttpUrl
 import okhttp3.HttpUrl.Companion.toHttpUrl
 import javax.inject.Inject
+import javax.inject.Singleton
 
-
+@Singleton
 class NasaImagesRepository @Inject constructor(private val imageSearchApi: ImagesNasaNetworkApi) {
 
 

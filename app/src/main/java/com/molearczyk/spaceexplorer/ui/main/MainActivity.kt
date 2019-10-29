@@ -5,6 +5,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.inputmethod.EditorInfo
 import android.widget.EditText
+import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -63,9 +64,9 @@ class MainActivity : AppCompatActivity(), MainView {
         }
         searchInputLayout.setEndIconOnClickListener {
             searchInputLayout.editText!!.text.clear()
-            presenter.onDefaultContent()
+            presenter.onUserInputCleared()
         }
-        presenter.onDefaultContent()
+        presenter.onInitializeData()
     }
 
 
@@ -88,6 +89,11 @@ class MainActivity : AppCompatActivity(), MainView {
         startActivity(Intent(this@MainActivity, ImageDetailActivity::class.java).putGalleryEvent(event),
                 ActivityOptions.makeScaleUpAnimation(clickedView, 0, clickedView.height / 2, clickedView.width, clickedView.height).toBundle())
     }
+
+    override fun onHintReloaded(keywords: String) {
+        searchInputLayout.editText?.setText(keywords, TextView.BufferType.EDITABLE)
+    }
+
 
     override fun hidePromptViews() {
         retryButton.gone()

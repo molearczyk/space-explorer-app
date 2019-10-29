@@ -17,4 +17,6 @@ interface MainView {
     fun showNoResultsWarning()
 
     fun hidePromptViews()
+
+    fun onHintReloaded(keywords: String)
 }

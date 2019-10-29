@@ -6,13 +6,14 @@ import com.molearczyk.spaceexplorer.isNetworkError
 import com.molearczyk.spaceexplorer.network.NasaImagesRepository
 import com.molearczyk.spaceexplorer.network.models.GalleryEntry
 import com.molearczyk.spaceexplorer.ui.BasePresenter
+import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import javax.inject.Inject
 
-class MainPresenter @Inject constructor(private val nasaImagesRepository: NasaImagesRepository) : BasePresenter<MainView>() {
+class MainPresenter @Inject constructor(private val nasaImagesRepository: NasaImagesRepository, private val queryTracker: QueryTracker) : BasePresenter<MainView>() {
 
-    fun onDefaultContent() {
+    fun onUserInputCleared() {
         subscriptions.add(nasaImagesRepository
                 .fetchMostPopularImages()
                 .subscribeOn(Schedulers.io())
@@ -20,12 +21,32 @@ class MainPresenter @Inject constructor(private val nasaImagesRepository: NasaIm
                 .subscribe(this::handleResult, this::handleQueryError))
     }
 
+    fun onInitializeData() {
+        subscriptions.add(
+                queryTracker.checkLatestQuery()
+                        .doOnSuccess {
+                            view.onHintReloaded(it.keywords!!)
+                        }
+                        .flatMapSingleElement {
+                            nasaImagesRepository
+                                    .fetchImages(it.keywords?.takeIf(String::isNotBlank))
+                                    .subscribeOn(Schedulers.io())
+                        }
+                        .switchIfEmpty(nasaImagesRepository.fetchMostPopularImages()
+                                .subscribeOn(Schedulers.io()))
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(this::handleResult, this::handleQueryError))
+    }
+
     fun onQuerySearch(query: Editable? = null) {
-        subscriptions.add(nasaImagesRepository
-                .fetchImages(query?.toString()?.takeIf(String::isNotBlank))
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(this::handleResult, this::handleQueryError))
+        subscriptions.add(
+                queryTracker.onTrackQueryInvoked(Single.fromCallable { Query(query.toString()) })
+                        .flatMap {
+                            nasaImagesRepository.fetchImages(it.keywords?.takeIf(String::isNotBlank))
+                        }
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(this::handleResult, this::handleQueryError))
     }
 
     fun onRetryClicked() {
