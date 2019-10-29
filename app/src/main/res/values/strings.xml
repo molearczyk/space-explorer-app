@@ -7,5 +7,5 @@
     <string name="warning_no_results">Your query yielded no results.\n Please try a different query.</string>
 
 
-    <string name="image_description_ration" translatable="false">3:2</string>
+    <string name="image_description_ratio" translatable="false">3:2</string>
 </resources>

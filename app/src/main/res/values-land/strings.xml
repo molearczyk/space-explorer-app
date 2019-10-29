@@ -1,4 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="image_description_ration" translatable="false">5:1</string>
+    <string name="image_description_ratio" translatable="false">5:1</string>
 </resources>

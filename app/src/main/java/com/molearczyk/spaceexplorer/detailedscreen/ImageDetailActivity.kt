@@ -151,6 +151,9 @@ class ImageDetailActivity : AppCompatActivity(), ImageDetailsView, HasAndroidInj
         set.setMargin(R.id.contentWrapperFrameLayout, ConstraintSet.TOP, resources.getDimensionPixelSize(R.dimen.activity_vertical_margin))
         set.connect(R.id.contentWrapperFrameLayout, ConstraintSet.TOP, R.id.toolbarWrapperAppBarLayout, ConstraintSet.BOTTOM)
         set.applyTo(rootConstraintLayout)
+        contentDescriptionLinearLayout.updateLayoutParams {
+            height = ViewGroup.LayoutParams.WRAP_CONTENT
+        }
         imageDescriptionTextView.text = fullDescription
         if (retryContentInclude.isVisible) {
             retryContentInclude.invisible()
@@ -161,10 +164,13 @@ class ImageDetailActivity : AppCompatActivity(), ImageDetailsView, HasAndroidInj
         TransitionManager.beginDelayedTransition(rootConstraintLayout)
         val set = ConstraintSet()
         set.clone(rootConstraintLayout)
-        set.setDimensionRatio(R.id.contentWrapperFrameLayout, getString(R.string.image_description_ration))
+        set.setDimensionRatio(R.id.contentWrapperFrameLayout, getString(R.string.image_description_ratio))
         set.setMargin(R.id.contentWrapperFrameLayout, ConstraintSet.TOP, 0)
         set.clear(R.id.contentWrapperFrameLayout, ConstraintSet.TOP)
         set.applyTo(rootConstraintLayout)
+        contentDescriptionLinearLayout.updateLayoutParams {
+            height = ViewGroup.LayoutParams.MATCH_PARENT
+        }
         imageDescriptionTextView.text = shortDescription
         if (retryContentInclude.isInvisible) {
             retryContentInclude.show()
