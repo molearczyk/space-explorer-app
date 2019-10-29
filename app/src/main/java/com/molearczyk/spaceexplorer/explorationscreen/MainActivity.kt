@@ -1,4 +1,4 @@
-package com.molearczyk.spaceexplorer.ui.main
+package com.molearczyk.spaceexplorer.explorationscreen
 
 import android.app.ActivityOptions
 import android.content.Intent
@@ -9,10 +9,14 @@ import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.molearczyk.spaceexplorer.*
+import com.google.android.material.appbar.MaterialToolbar
+import com.molearczyk.spaceexplorer.R
+import com.molearczyk.spaceexplorer.basics.*
+import com.molearczyk.spaceexplorer.detailedscreen.ImageDetailActivity
+import com.molearczyk.spaceexplorer.explorationscreen.adapter.GalleryAdapter
+import com.molearczyk.spaceexplorer.explorationscreen.models.GalleryEntryEvent
 import com.molearczyk.spaceexplorer.imageloading.ImageLoader
 import com.molearczyk.spaceexplorer.network.models.GalleryEntry
-import com.molearczyk.spaceexplorer.ui.detail.ImageDetailActivity
 import dagger.android.AndroidInjection
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.layout_error_state.*
@@ -38,20 +42,16 @@ class MainActivity : AppCompatActivity(), MainView {
         AndroidInjection.inject(this)
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        setSupportActionBar(toolbar)
-        toolbar.setTitle(R.string.app_name)
-        toolbar.setTitleMargin(resources.getDimensionPixelSize(R.dimen.activity_horizontal_margin_doubled), 0, 0, 0)
-
-        presenter.initView(this)
+        setupToolbar(toolbar)
 
         spaceImagesRecyclerView.layoutManager = GridLayoutManager(this, gridSpan, RecyclerView.VERTICAL, false)//(this, 2)
-        adapter = GalleryAdapter(this::navigateToFullscreen, imageLoader, presenter::onNextPageRequested, gridSpan, this)
-        spaceImagesRecyclerView.adapter = adapter
+        spaceImagesRecyclerView.adapter = GalleryAdapter(this::navigateToFullscreen, imageLoader, presenter::onNextPageRequested, gridSpan, this).also {
+            adapter = it
+        }
 
         retryButton.setOnClickListener {
             presenter.onRetryClicked()
         }
-
         searchInputLayout.editText!!.setOnEditorActionListener { view, actionId, _ ->
             when (actionId) {
                 EditorInfo.IME_ACTION_SEARCH -> {
@@ -69,6 +69,12 @@ class MainActivity : AppCompatActivity(), MainView {
         presenter.onInitializeData()
     }
 
+    private fun setupToolbar(toolbar: MaterialToolbar) {
+        setSupportActionBar(toolbar)
+        toolbar.setTitle(R.string.app_name)
+        toolbar.setTitleMargin(resources.getDimensionPixelSize(R.dimen.activity_horizontal_margin_doubled), 0, 0, 0)
+    }
+
 
     override fun onDestroy() {
         searchInputLayout.clearOnEndIconChangedListeners()
@@ -77,6 +83,12 @@ class MainActivity : AppCompatActivity(), MainView {
     }
 
     override fun showNewImages(newImages: List<GalleryEntry>) {
+        if (newImages.isEmpty()) {
+            showNoResultsWarning()
+        } else {
+            hidePromptViews()
+        }
+
         adapter.setNewEntries(newImages)
     }
 
@@ -94,12 +106,6 @@ class MainActivity : AppCompatActivity(), MainView {
         searchInputLayout.editText?.setText(keywords, TextView.BufferType.EDITABLE)
     }
 
-
-    override fun hidePromptViews() {
-        retryButton.gone()
-        noContentPromptView.gone()
-    }
-
     override fun showInternetAccessError() {
         noContentPromptView.setCompoundDrawablesRelativeWithIntrinsicBounds(0, R.drawable.ic_error_outline_accent_24dp, 0, 0)
         noContentPromptView.setText(R.string.error_no_internet_description)
@@ -114,10 +120,16 @@ class MainActivity : AppCompatActivity(), MainView {
         retryButton.show()
     }
 
-    override fun showNoResultsWarning() {
+    private fun showNoResultsWarning() {
         noContentPromptView.setCompoundDrawablesRelativeWithIntrinsicBounds(0, R.drawable.ic_sentiment_dissatisfied_white_24dp, 0, 0)
         noContentPromptView.setText(R.string.warning_no_results)
         noContentPromptView.show()
     }
+
+    private fun hidePromptViews() {
+        retryButton.gone()
+        noContentPromptView.gone()
+    }
+
 
 }

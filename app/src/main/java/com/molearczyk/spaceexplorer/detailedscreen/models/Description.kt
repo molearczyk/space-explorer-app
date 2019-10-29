@@ -1,4 +1,4 @@
-package com.molearczyk.spaceexplorer.ui.detail
+package com.molearczyk.spaceexplorer.detailedscreen.models
 
 sealed class Description {
 

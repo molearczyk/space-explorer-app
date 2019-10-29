@@ -1,16 +1,12 @@
-package com.molearczyk.spaceexplorer.ui
+package com.molearczyk.spaceexplorer.basics
 
 import io.reactivex.disposables.CompositeDisposable
 
-abstract class BasePresenter<T : Any> {
+abstract class BasePresenter<T : Any>(baseView: T) {
 
     protected val subscriptions: CompositeDisposable = CompositeDisposable()
 
-    protected lateinit var view: T
-
-    open fun initView(source: T) {
-        view = source
-    }
+    protected var view: T = baseView
 
     open fun onCleanup() {
         subscriptions.clear()

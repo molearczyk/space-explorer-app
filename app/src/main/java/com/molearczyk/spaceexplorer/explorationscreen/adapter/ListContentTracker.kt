@@ -1,4 +1,4 @@
-package com.molearczyk.spaceexplorer.ui.main
+package com.molearczyk.spaceexplorer.explorationscreen.adapter
 
 import com.molearczyk.spaceexplorer.network.models.GalleryEntry
 

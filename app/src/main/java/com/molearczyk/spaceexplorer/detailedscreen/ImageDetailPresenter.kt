@@ -1,21 +1,22 @@
-package com.molearczyk.spaceexplorer.ui.detail
+package com.molearczyk.spaceexplorer.detailedscreen
 
 import android.text.TextPaint
 import android.text.TextUtils
 import android.util.Log
 import androidx.core.text.HtmlCompat
-import com.molearczyk.spaceexplorer.isNetworkError
+import com.molearczyk.spaceexplorer.basics.BasePresenter
+import com.molearczyk.spaceexplorer.basics.isNetworkError
+import com.molearczyk.spaceexplorer.detailedscreen.models.Description
+import com.molearczyk.spaceexplorer.explorationscreen.models.GalleryEntryEvent
 import com.molearczyk.spaceexplorer.network.NasaImagesRepository
-import com.molearczyk.spaceexplorer.ui.BasePresenter
-import com.molearczyk.spaceexplorer.ui.main.GalleryEntryEvent
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.schedulers.Schedulers
+import com.molearczyk.spaceexplorer.schedulers.SchedulerProvider
 import okhttp3.HttpUrl.Companion.toHttpUrl
 import javax.inject.Inject
 
-class ImageDetailPresenter @Inject constructor(private val nasaImagesRepository: NasaImagesRepository) : BasePresenter<ImageDetailsView>() {
-
-    private lateinit var event: GalleryEntryEvent
+class ImageDetailPresenter @Inject constructor(private val nasaImagesRepository: NasaImagesRepository,
+                                               private val schedulers: SchedulerProvider,
+                                               private val event: GalleryEntryEvent,
+                                               view: ImageDetailsView) : BasePresenter<ImageDetailsView>(view) {
 
     private var areSystemControlsVisible: Boolean = true
 
@@ -23,15 +24,11 @@ class ImageDetailPresenter @Inject constructor(private val nasaImagesRepository:
 
     private lateinit var description: Description
 
-    fun init(event: GalleryEntryEvent) {
-        this.event = event
-    }
-
     fun fetchImageDetail() {
         subscriptions.add(nasaImagesRepository
                 .fetchImageAddress(event.nasaIdentifier.toHttpUrl())
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(schedulers.io())
+                .observeOn(schedulers.mainThread())
                 .subscribe(view::showImage) {
                     if (it.isNetworkError()) {
                         Log.w("MainActivity", "Caught network error", it)

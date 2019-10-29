@@ -1,5 +1,6 @@
-package com.molearczyk.spaceexplorer.ui.detail
+package com.molearczyk.spaceexplorer.detailedscreen.di
 
+import com.molearczyk.spaceexplorer.detailedscreen.ImageDetailActivity
 import dagger.Binds
 import dagger.Module
 import dagger.android.AndroidInjector

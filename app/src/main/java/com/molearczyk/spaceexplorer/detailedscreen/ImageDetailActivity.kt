@@ -1,9 +1,10 @@
-package com.molearczyk.spaceexplorer.ui.detail
+package com.molearczyk.spaceexplorer.detailedscreen
 
 import android.os.Bundle
 import android.os.Handler
 import android.view.MenuItem
 import android.view.View
+import android.view.ViewGroup
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
@@ -11,8 +12,13 @@ import androidx.constraintlayout.widget.ConstraintSet
 import androidx.core.view.doOnNextLayout
 import androidx.core.view.isInvisible
 import androidx.core.view.isVisible
+import androidx.core.view.updateLayoutParams
 import androidx.transition.TransitionManager
-import com.molearczyk.spaceexplorer.*
+import com.molearczyk.spaceexplorer.R
+import com.molearczyk.spaceexplorer.basics.gone
+import com.molearczyk.spaceexplorer.basics.invisible
+import com.molearczyk.spaceexplorer.basics.show
+import com.molearczyk.spaceexplorer.detailedscreen.models.Description
 import com.molearczyk.spaceexplorer.imageloading.ImageLoader
 import dagger.android.AndroidInjection
 import dagger.android.AndroidInjector
@@ -59,8 +65,6 @@ class ImageDetailActivity : AppCompatActivity(), ImageDetailsView, HasAndroidInj
         setContentView(R.layout.activity_image_detail)
         setupToolbar(toolbar)
 
-        presenter.initView(this)
-        presenter.init(intent.getGalleryEvent())
         presenter.fetchImageDetail()
 
         fullscreenImageView.setOnClickListener { presenter.onFullImageClick() }

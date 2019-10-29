@@ -1,4 +1,4 @@
-package com.molearczyk.spaceexplorer.ui.main
+package com.molearczyk.spaceexplorer.explorationscreen.models
 
 import android.os.Parcelable
 import kotlinx.android.parcel.Parcelize

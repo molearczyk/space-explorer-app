@@ -1,5 +1,6 @@
-package com.molearczyk.spaceexplorer.ui.main
+package com.molearczyk.spaceexplorer.explorationscreen
 
+import com.molearczyk.spaceexplorer.explorationscreen.models.GalleryEntryEvent
 import com.molearczyk.spaceexplorer.network.models.GalleryEntry
 
 interface MainView {
@@ -13,10 +14,6 @@ interface MainView {
     fun showInternetAccessError()
 
     fun showGenericError()
-
-    fun showNoResultsWarning()
-
-    fun hidePromptViews()
 
     fun onHintReloaded(keywords: String)
 }

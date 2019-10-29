@@ -1,4 +1,4 @@
-package com.molearczyk.spaceexplorer.ui.detail
+package com.molearczyk.spaceexplorer.detailedscreen
 
 import okhttp3.HttpUrl
 

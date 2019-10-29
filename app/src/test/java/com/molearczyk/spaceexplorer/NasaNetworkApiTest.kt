@@ -135,7 +135,6 @@ class NasaNetworkApiTest {
                 .test()
                 .awaitCount(1)
                 .assertValue {
-                    print(it)
                     true
                 }
     }

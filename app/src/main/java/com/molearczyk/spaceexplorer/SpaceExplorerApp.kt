@@ -1,8 +1,6 @@
 package com.molearczyk.spaceexplorer
 
 import android.app.Application
-import com.molearczyk.spaceexplorer.ui.AppModule
-import com.molearczyk.spaceexplorer.ui.DaggerSpaceExplorerAppComponent
 import dagger.android.AndroidInjector
 import dagger.android.DispatchingAndroidInjector
 import dagger.android.HasAndroidInjector

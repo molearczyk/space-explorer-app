@@ -1,4 +1,4 @@
-package com.molearczyk.spaceexplorer.ui.main
+package com.molearczyk.spaceexplorer.querytracking
 
 import io.reactivex.Flowable
 import io.reactivex.Maybe

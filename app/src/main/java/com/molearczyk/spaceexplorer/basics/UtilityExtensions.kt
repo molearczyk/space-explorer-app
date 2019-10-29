@@ -1,4 +1,4 @@
-package com.molearczyk.spaceexplorer
+package com.molearczyk.spaceexplorer.basics
 
 import android.view.LayoutInflater
 import android.view.View
@@ -6,6 +6,8 @@ import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import androidx.annotation.LayoutRes
 import androidx.core.content.getSystemService
+import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.disposables.Disposable
 import java.net.UnknownHostException
 
 fun ViewGroup.inflate(
@@ -33,4 +35,8 @@ fun Throwable.isNetworkError(): Boolean = this is UnknownHostException
 
 fun View.hideKeyboard() {
     this.context.getSystemService<InputMethodManager>()?.hideSoftInputFromWindow(windowToken, 0)
+}
+
+operator fun CompositeDisposable.plusAssign(subscription: Disposable) {
+    this.add(subscription)
 }

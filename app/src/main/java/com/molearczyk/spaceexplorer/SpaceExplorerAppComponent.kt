@@ -1,13 +1,15 @@
-package com.molearczyk.spaceexplorer.ui
+package com.molearczyk.spaceexplorer
 
 import android.content.Context
-import com.molearczyk.spaceexplorer.SpaceExplorerApp
+import com.molearczyk.spaceexplorer.detailedscreen.di.ImageDetailActivityModule
+import com.molearczyk.spaceexplorer.explorationscreen.di.MainActivityModule
 import com.molearczyk.spaceexplorer.network.NetworkModule
-import com.molearczyk.spaceexplorer.ui.detail.ImageDetailActivityModule
-import com.molearczyk.spaceexplorer.ui.main.MainActivityModule
+import com.molearczyk.spaceexplorer.schedulers.DefaultSchedulerProvider
+import com.molearczyk.spaceexplorer.schedulers.SchedulerProvider
 import dagger.Component
 import dagger.Module
 import dagger.Provides
+import dagger.Reusable
 import dagger.android.AndroidInjectionModule
 import javax.inject.Singleton
 
@@ -28,6 +30,10 @@ class AppModule(private val app: SpaceExplorerApp) {
 
     @Provides
     fun provideAppContext(): Context = app.applicationContext
+
+    @Provides
+    @Reusable
+    fun provideAppSchedulers(): SchedulerProvider = DefaultSchedulerProvider()
 
 }
 
