@@ -22,7 +22,6 @@
 
         <activity
             android:name=".detailedscreen.ImageDetailActivity"
-            android:configChanges="orientation|keyboardHidden|screenSize"
             android:theme="@style/Theme.SpaceExplorer.Fullscreen" />
 
         <activity

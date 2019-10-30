@@ -17,6 +17,7 @@
         android:layout_marginEnd="@dimen/activity_horizontal_margin"
         android:gravity="center"
         android:paddingBottom="@dimen/activity_vertical_margin"
+        android:textAppearance="?attr/textAppearanceBody1"
         android:visibility="gone"
         tools:drawableTop="@drawable/ic_error_outline_accent_24dp" />
 
