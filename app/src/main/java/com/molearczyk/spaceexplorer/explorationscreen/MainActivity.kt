@@ -107,6 +107,7 @@ class MainActivity : AppCompatActivity(), MainView {
     }
 
     override fun showInternetAccessError() {
+        adapter.setNewEntries(emptyList())
         noContentPromptView.setCompoundDrawablesRelativeWithIntrinsicBounds(0, R.drawable.ic_error_outline_accent_24dp, 0, 0)
         noContentPromptView.setText(R.string.error_no_internet_description)
         noContentPromptView.show()
@@ -114,6 +115,7 @@ class MainActivity : AppCompatActivity(), MainView {
     }
 
     override fun showGenericError() {
+        adapter.setNewEntries(emptyList())
         noContentPromptView.setCompoundDrawablesRelativeWithIntrinsicBounds(0, R.drawable.ic_error_outline_accent_24dp, 0, 0)
         noContentPromptView.setText(R.string.error_generic_description)
         noContentPromptView.show()

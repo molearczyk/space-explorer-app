@@ -2,6 +2,7 @@ package com.molearczyk.spaceexplorer.network
 
 import com.molearczyk.spaceexplorer.network.models.GalleryEntry
 import com.molearczyk.spaceexplorer.network.nasa.CollectionContainer
+import com.molearczyk.spaceexplorer.network.nasa.CollectionItem
 import com.molearczyk.spaceexplorer.network.nasa.ImagesNasaNetworkApi
 import io.reactivex.Flowable
 import io.reactivex.Maybe
@@ -19,17 +20,13 @@ class NasaImagesRepository @Inject constructor(private val imageSearchApi: Image
 
     private var lastRequest: RequestRepresentation? = null
 
-    fun fetchMostPopularImages(): Single<List<GalleryEntry>> {
-        return imageSearchApi.fetchPopular()
-                .map(CollectionContainer::collection)
-                .flatMapPublisher { Flowable.fromIterable(it.items) }
-                .map {
-                    GalleryEntry(it.links.find { it.rel == PreviewLink }!!.href.toHttpUrl(), it.href.toHttpUrl(), it.data[0].title, it.data[0].description
-                            ?: "")
-                }
-                .toList()
-
-    }
+    fun fetchMostPopularImages(): Single<List<GalleryEntry>> =
+            imageSearchApi.fetchPopular()
+                    .map(CollectionContainer::collection)
+                    .flatMapPublisher { Flowable.fromIterable(it.items) }
+                    .filter(this@NasaImagesRepository::containsValidPreviewItem)
+                    .map(this@NasaImagesRepository::mapCollectionItemToGalleryEntry)
+                    .toList()
 
     fun fetchImages(queryKeywords: String? = null, page: Int? = null): Single<List<GalleryEntry>> {
         lastRequest = RequestRepresentation(queryKeywords, page)
@@ -41,17 +38,14 @@ class NasaImagesRepository @Inject constructor(private val imageSearchApi: Image
                         .map(ImageCacheRepresentation::result),
                 imageSearchApi.search(queryKeywords, page).toMaybe()
                         .doAfterSuccess {
-                            val nextPage = it.collection.links?.find { it.prompt == "Next" }
+                            val nextPage = it.collection.links?.find { it.prompt == Next }
                             memoryCache = ImageCacheRepresentation(queryKeywords, page, nextPage != null, it)
                         })
                 .firstElement()
                 .map(CollectionContainer::collection)
                 .flatMapPublisher { Flowable.fromIterable(it.items) }
-                .filter { it.links.any { it.rel == PreviewLink } }
-                .map {
-                    GalleryEntry(it.links.find { it.rel == PreviewLink }!!.href.toHttpUrl(), it.href.toHttpUrl(), it.data[0].title, it.data[0].description
-                            ?: "")
-                }
+                .filter(this@NasaImagesRepository::containsValidPreviewItem)
+                .map(this@NasaImagesRepository::mapCollectionItemToGalleryEntry)
                 .toList()
     }
 
@@ -72,8 +66,21 @@ class NasaImagesRepository @Inject constructor(private val imageSearchApi: Image
     fun fetchImageAddress(linksSource: HttpUrl): Single<HttpUrl> =
             imageSearchApi.fetchImageLinkContainer(linksSource)
                     .map(this@NasaImagesRepository::resolveImageUrl)
-                    .map { it.newBuilder().scheme("https").build() }
+                    .map(this@NasaImagesRepository::enforceHttps)
 
+    private fun containsValidPreviewItem(item: CollectionItem) =
+            item.links.any { it.rel == PreviewLink } && item.data.isNotEmpty()
+
+    private fun mapCollectionItemToGalleryEntry(it: CollectionItem) =
+            GalleryEntry(it.links.find { it.rel == PreviewLink }!!.href.toHttpUrl(), it.href.toHttpUrl(), it.data[0].title, it.data[0].description
+                    ?: "")
+
+    private fun enforceHttps(url: HttpUrl): HttpUrl =
+            if (url.isHttps) {
+                url
+            } else {
+                url.newBuilder().scheme("https").build()
+            }
 
     private fun resolveImageUrl(urlList: List<String>): HttpUrl =
             urlList.filter { !it.endsWith(".json") }
@@ -88,6 +95,7 @@ class NasaImagesRepository @Inject constructor(private val imageSearchApi: Image
 
     companion object NasaKeywords {
         const val PreviewLink = "preview"
+        const val Next = "Next"
         val EmptyCache = ImageCacheRepresentation(null, null, false, null)
     }
 

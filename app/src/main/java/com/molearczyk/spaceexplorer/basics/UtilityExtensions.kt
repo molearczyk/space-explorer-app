@@ -40,3 +40,7 @@ fun View.hideKeyboard() {
 operator fun CompositeDisposable.plusAssign(subscription: Disposable) {
     this.add(subscription)
 }
+
+inline fun Disposable.subscribeUsing(subscriptions: CompositeDisposable) {
+    subscriptions += this
+}

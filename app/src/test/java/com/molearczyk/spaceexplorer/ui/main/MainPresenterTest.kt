@@ -6,6 +6,7 @@ import com.molearczyk.spaceexplorer.network.NasaImagesRepository
 import com.molearczyk.spaceexplorer.network.models.GalleryEntry
 import com.molearczyk.spaceexplorer.network.nasa.*
 import com.molearczyk.spaceexplorer.querytracking.QueryTracker
+import com.molearczyk.spaceexplorer.querytracking.TextQuery
 import com.molearczyk.spaceexplorer.schedulers.TestSchedulerProvider
 import io.reactivex.Single
 import okhttp3.HttpUrl
@@ -27,7 +28,7 @@ class MainPresenterTest {
     }
 
     @Test
-    fun `when setup with correct one item then presenter parses and shows one correct item`() {
+    fun `when setup without cache with correct one item then presenter parses and shows one correct item`() {
         /*Define a correct item*/
         val description = "description"
         val title = "title"
@@ -40,7 +41,7 @@ class MainPresenterTest {
         val container = CollectionContainer(CollectionContent("", listOf(collectionItem), emptyList(), null, "1.0"))
 
         /*Setup a presenter*/
-        val mainPresenter = MainPresenter(createFakeImageRepository(container), QueryTracker(), TestSchedulerProvider(), presenterView)
+        val mainPresenter = MainPresenter(createImageRepositoryWithPopularRequest(container), QueryTracker(), TestSchedulerProvider(), presenterView)
 
         //run the initial invocation
         mainPresenter.onInitializeData()
@@ -49,31 +50,46 @@ class MainPresenterTest {
     }
 
     @Test
-    fun `when setup with one correct item and one corrupted item presenter parses and returns one correct item`() {
+    fun `when setup without cache called with one correct item and one corrupted item presenter parses and returns one correct item`() {
         val description = "description"
         val title = "title"
         val googleUrl = "https://google.com".toHttpUrl()
 
         val correctExpectedItem = GalleryEntry(googleUrl, googleUrl, title, description)
 
-        //Prepare fake data - first correct, then faulty
+        //Prepare fake data - first correct sample, then faulty sample
         val correctFakeItem = DataItem(null, "", description, null, "image", "", null, title, null, null, null, null)
         val correctCollectionItem = CollectionItem(listOf(correctFakeItem), googleUrl.toString(), listOf(Link(googleUrl.toString(), "preview", null, null)))
 
         val brokenUrl = "brokenurl.com"
-        val faultyFakeItem = DataItem(null, "", null, null, "error", "", null, "", null, null, null, null)
-        val faultyCollectionItem = CollectionItem(listOf(faultyFakeItem), brokenUrl, listOf(Link(brokenUrl, "preview", null, null)))
+        val faultyItem = DataItem(null, "", null, null, "error", "", null, "", null, null, null, null)
+        val collectionItem = CollectionItem(listOf(faultyItem), brokenUrl, listOf(Link(brokenUrl, "broken_preview_keyword", null, null)))
 
-        val fakeContainer = CollectionContainer(CollectionContent("", listOf(correctCollectionItem, faultyCollectionItem), emptyList(), null, "1.0"))
-        val mainPresenter = MainPresenter(createFakeImageRepository(fakeContainer), QueryTracker(), TestSchedulerProvider(), presenterView)
+        val container = CollectionContainer(CollectionContent("", listOf(correctCollectionItem, collectionItem), emptyList(), null, "1.0"))
+        val mainPresenter = MainPresenter(createImageRepositoryWithPopularRequest(container), QueryTracker(), TestSchedulerProvider(), presenterView)
 
         //run the initial invocation
         mainPresenter.onInitializeData()
-
+        /* Assert that one correct item is being shown. Ignore wrong items.*/
         Mockito.verify(presenterView).showNewImages(listOf(correctExpectedItem))
     }
 
-    private fun createFakeImageRepository(fakeContainer: CollectionContainer): NasaImagesRepository {
+    @Test
+    fun `when setup with cache is called the query cache is retrieved and search returns empty array`() {
+        val fakeContainer = CollectionContainer(CollectionContent("", listOf(), emptyList(), null, "1.0"))
+        /* Setup cached data */
+        val queryTracker = QueryTracker()
+                .also {
+                    it.onTrackQueryInvoked(Single.just(TextQuery("query text"))).blockingGet()
+                }
+        val mainPresenter = MainPresenter(createImageRepositoryWithSearchRequest(fakeContainer), queryTracker, TestSchedulerProvider(), presenterView)
+        /*Invoke initialization*/
+        mainPresenter.onInitializeData()
+        /*Ensure that no error is thrown and result is returned.*/
+        Mockito.verify(presenterView).showNewImages(listOf())
+    }
+
+    private fun createImageRepositoryWithPopularRequest(fakeContainer: CollectionContainer): NasaImagesRepository {
         return NasaImagesRepository(object : ImagesNasaNetworkApi {
 
             override fun search(keywords: String?, page: Int?): Single<CollectionContainer> = doNotCallThis()
@@ -88,7 +104,20 @@ class MainPresenterTest {
 
     }
 
-    inline fun doNotCallThis(): Nothing = throw IllegalArgumentException("Must not be called!")
+    private fun createImageRepositoryWithSearchRequest(fakeContainer: CollectionContainer): NasaImagesRepository {
+        return NasaImagesRepository(object : ImagesNasaNetworkApi {
+
+            override fun search(keywords: String?, page: Int?): Single<CollectionContainer> = Single.just(fakeContainer)
+
+            override fun fetchPopular(): Single<CollectionContainer> = Single.fromCallable(this@MainPresenterTest::doNotCallThis)
+
+            override fun fetchImageLinkContainer(fullPath: HttpUrl): Single<List<String>> = doNotCallThis()
+
+        })
+
+    }
+
+    fun doNotCallThis(): Nothing = throw IllegalArgumentException("Must not be called!")
 
 }
 
