@@ -4,7 +4,7 @@ import com.molearczyk.spaceexplorer.explorationscreen.MainPresenter
 import com.molearczyk.spaceexplorer.explorationscreen.MainView
 import com.molearczyk.spaceexplorer.network.NasaImagesRepository
 import com.molearczyk.spaceexplorer.network.models.GalleryEntry
-import com.molearczyk.spaceexplorer.network.nasa.*
+import com.molearczyk.spaceexplorer.network.nasaendpoints.*
 import com.molearczyk.spaceexplorer.querytracking.QueryTracker
 import com.molearczyk.spaceexplorer.querytracking.TextQuery
 import com.molearczyk.spaceexplorer.schedulers.TestSchedulerProvider

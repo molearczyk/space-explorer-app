@@ -4,8 +4,8 @@ import com.molearczyk.spaceexplorer.network.NasaImagesRepository
 import com.molearczyk.spaceexplorer.network.NetworkModule
 import com.molearczyk.spaceexplorer.network.models.GalleryEntry
 import com.molearczyk.spaceexplorer.network.models.ServerProperties
-import com.molearczyk.spaceexplorer.network.nasa.CollectionContainer
-import com.molearczyk.spaceexplorer.network.nasa.ImagesNasaNetworkApi
+import com.molearczyk.spaceexplorer.network.nasaendpoints.CollectionContainer
+import com.molearczyk.spaceexplorer.network.nasaendpoints.ImagesNasaNetworkApi
 import io.reactivex.Single
 import io.reactivex.functions.BiFunction
 import okhttp3.HttpUrl.Companion.toHttpUrl

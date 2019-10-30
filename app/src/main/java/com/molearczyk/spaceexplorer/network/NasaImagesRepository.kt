@@ -1,9 +1,11 @@
 package com.molearczyk.spaceexplorer.network
 
 import com.molearczyk.spaceexplorer.network.models.GalleryEntry
-import com.molearczyk.spaceexplorer.network.nasa.CollectionContainer
-import com.molearczyk.spaceexplorer.network.nasa.CollectionItem
-import com.molearczyk.spaceexplorer.network.nasa.ImagesNasaNetworkApi
+import com.molearczyk.spaceexplorer.network.models.ImageCacheRepresentation
+import com.molearczyk.spaceexplorer.network.models.RequestRepresentation
+import com.molearczyk.spaceexplorer.network.nasaendpoints.CollectionContainer
+import com.molearczyk.spaceexplorer.network.nasaendpoints.CollectionItem
+import com.molearczyk.spaceexplorer.network.nasaendpoints.ImagesNasaNetworkApi
 import io.reactivex.Flowable
 import io.reactivex.Maybe
 import io.reactivex.Single

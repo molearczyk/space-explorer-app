@@ -1,4 +1,4 @@
-package com.molearczyk.spaceexplorer.network.nasa
+package com.molearczyk.spaceexplorer.network.nasaendpoints
 
 import io.reactivex.Single
 import okhttp3.HttpUrl

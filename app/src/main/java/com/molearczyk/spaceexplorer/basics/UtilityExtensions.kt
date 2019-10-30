@@ -37,6 +37,10 @@ fun View.hideKeyboard() {
     this.context.getSystemService<InputMethodManager>()?.hideSoftInputFromWindow(windowToken, 0)
 }
 
+fun View.promptKeyboard() {
+    this.context.getSystemService<InputMethodManager>()?.toggleSoftInputFromWindow(windowToken, InputMethodManager.SHOW_IMPLICIT, 0)
+}
+
 operator fun CompositeDisposable.plusAssign(subscription: Disposable) {
     this.add(subscription)
 }

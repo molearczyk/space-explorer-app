@@ -4,7 +4,7 @@ import android.util.Log
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import com.molearczyk.spaceexplorer.BuildConfig
 import com.molearczyk.spaceexplorer.network.models.ServerProperties
-import com.molearczyk.spaceexplorer.network.nasa.ImagesNasaNetworkApi
+import com.molearczyk.spaceexplorer.network.nasaendpoints.ImagesNasaNetworkApi
 import dagger.Module
 import dagger.Provides
 import dagger.Reusable

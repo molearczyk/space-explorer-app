@@ -108,24 +108,34 @@ class MainActivity : AppCompatActivity(), MainView {
 
     override fun showInternetAccessError() {
         adapter.setNewEntries(emptyList())
-        noContentPromptView.setCompoundDrawablesRelativeWithIntrinsicBounds(0, R.drawable.ic_error_outline_accent_24dp, 0, 0)
-        noContentPromptView.setText(R.string.error_no_internet_description)
-        noContentPromptView.show()
+        noContentPromptView.run {
+            setCompoundDrawablesRelativeWithIntrinsicBounds(0, R.drawable.ic_error_outline_accent_24dp, 0, 0)
+            setText(R.string.error_no_internet_description)
+            show()
+        }
         retryButton.show()
     }
 
     override fun showGenericError() {
         adapter.setNewEntries(emptyList())
-        noContentPromptView.setCompoundDrawablesRelativeWithIntrinsicBounds(0, R.drawable.ic_error_outline_accent_24dp, 0, 0)
-        noContentPromptView.setText(R.string.error_generic_description)
-        noContentPromptView.show()
+        noContentPromptView.run {
+            setCompoundDrawablesRelativeWithIntrinsicBounds(0, R.drawable.ic_error_outline_accent_24dp, 0, 0)
+            setText(R.string.error_generic_description)
+            show()
+        }
         retryButton.show()
     }
 
     private fun showNoResultsWarning() {
-        noContentPromptView.setCompoundDrawablesRelativeWithIntrinsicBounds(0, R.drawable.ic_sentiment_dissatisfied_white_24dp, 0, 0)
-        noContentPromptView.setText(R.string.warning_no_results)
-        noContentPromptView.show()
+        noContentPromptView.run {
+            setCompoundDrawablesRelativeWithIntrinsicBounds(0, R.drawable.ic_sentiment_dissatisfied_accent_24dp, 0, 0)
+            setText(R.string.warning_no_results)
+            show()
+            postDelayed({
+                noContentPromptView.promptKeyboard()
+            }, 1000)
+        }
+
     }
 
     private fun hidePromptViews() {

@@ -1,4 +1,4 @@
-package com.molearczyk.spaceexplorer.network.nasa
+package com.molearczyk.spaceexplorer.network.nasaendpoints
 
 import com.fasterxml.jackson.annotation.JsonCreator
 

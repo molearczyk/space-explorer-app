@@ -7,6 +7,7 @@
     <color name="colorOnPrimary">@android:color/white</color>
 
     <color name="primaryText">#FFFFFF</color>
+    <color name="primaryTextDark">#000000</color>
     <color name="secondaryText">#F5F5F5</color>
 
     <color name="icons">#FFFFFF</color>

@@ -13,6 +13,7 @@ import androidx.core.view.doOnNextLayout
 import androidx.core.view.isInvisible
 import androidx.core.view.isVisible
 import androidx.core.view.updateLayoutParams
+import androidx.core.widget.TextViewCompat
 import androidx.transition.TransitionManager
 import com.molearczyk.spaceexplorer.R
 import com.molearczyk.spaceexplorer.basics.gone
@@ -108,21 +109,23 @@ class ImageDetailActivity : AppCompatActivity(), ImageDetailsView, HasAndroidInj
     }
 
     override fun showInternetAccessError() {
-        retryButton.show()
         retryButton.setOnClickListener {
             presenter.retryOnClick()
         }
+        retryButton.show()
+        TextViewCompat.setTextAppearance(noContentPromptView, R.style.TextAppearance_SpaceExplorer_Body)
         noContentPromptView.setText(R.string.error_no_internet_description)
         noContentPromptView.show()
     }
 
     override fun showGenericError() {
-        retryButton.show()
         retryButton.setOnClickListener {
             presenter.retryOnClick()
         }
-        noContentPromptView.show()
+        retryButton.show()
+        TextViewCompat.setTextAppearance(noContentPromptView, R.style.TextAppearance_SpaceExplorer_Body)
         noContentPromptView.setText(R.string.error_generic_description)
+        noContentPromptView.show()
     }
 
     override fun hideSystemUi() {

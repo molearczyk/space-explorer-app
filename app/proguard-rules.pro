@@ -20,7 +20,7 @@
 # hide the original source file name.
 #-renamesourcefileattribute SourceFile
 
--keep class com.molearczyk.spaceexplorer.network.nasa.** {*;}
+-keep class com.molearczyk.spaceexplorer.network.nasaendpoints.** {*;}
 
 -dontwarn kotlin.reflect.**
 -keep class kotlin.** { *; }

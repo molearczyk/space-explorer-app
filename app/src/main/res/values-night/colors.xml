@@ -4,4 +4,5 @@
     <color name="colorPrimaryDark">#102027</color>
     <color name="colorSurface">@color/colorPrimary</color>
     <color name="divider">#33BDBDBD</color>
+    <color name="primaryTextDark">#FFFFFF</color>
 </resources>
