@@ -1,6 +1,8 @@
 # space-explorer-app
 
-The application, which gives a user a chance to explore vast collections of space imagery provided by NASA.
+The application allows for exploring huge collections of space imagery provided by NASA.
+You can browse the vast contents of NASA imagery resources with a search tool.
+Zoom the images to marvel over the beauty of the cosmos.
 
 
 The app icon is created and owned by: 
